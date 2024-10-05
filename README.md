@@ -1,4 +1,4 @@
-# local setup has git user i .git\config
+## local setup has git user i .git\config
 
 ```
 [user]
