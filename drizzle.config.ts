@@ -4,7 +4,7 @@ import { env } from "@/env.js";
 
 export default {
   schema: "./src/server/db/schema.ts",
-  dialect: "sqlite",
+  // dialect: "sqlite",
   driver: "turso",
   dbCredentials: {
     url: env.DATABASE_URL,

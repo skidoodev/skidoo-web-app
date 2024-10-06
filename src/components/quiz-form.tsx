@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,16 @@ import { format } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { type DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
+
+type GroupSizeType = "adults" | "children" | "pets" | "seniors";
+
+interface FormData {
+  destination: string;
+  dateRange: DateRange | undefined;
+  groupSize: Record<GroupSizeType, number>;
+  dreamTrip: string;
+  travelerTypes: string[];
+}
 
 const travelerTypes = [
   { id: "adventure", name: "The Adventure Seeker", icon: "🏔️" },
@@ -39,18 +49,17 @@ const stepImages = [
 
 export default function Component() {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     destination: "",
-    dateRange: {
-      from: undefined,
-      to: undefined,
-    },
+    dateRange: undefined,
     groupSize: { adults: 1, children: 0, pets: 0, seniors: 0 },
     dreamTrip: "",
     travelerTypes: [],
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -58,11 +67,13 @@ export default function Component() {
   const handleDateRangeChange = (range: DateRange | undefined) => {
     setFormData((prev) => ({
       ...prev,
-      dateRange: range || { from: undefined, to: undefined },
+      dateRange: range,
     }));
   };
-
-  const handleGroupSizeChange = (type, operation) => {
+  const handleGroupSizeChange = (
+    type: GroupSizeType,
+    operation: "add" | "subtract",
+  ) => {
     setFormData((prev) => ({
       ...prev,
       groupSize: {
@@ -75,7 +86,7 @@ export default function Component() {
     }));
   };
 
-  const handleTravelerTypeToggle = (id) => {
+  const handleTravelerTypeToggle = (id: string) => {
     setFormData((prev) => ({
       ...prev,
       travelerTypes: prev.travelerTypes.includes(id)
@@ -202,42 +213,39 @@ export default function Component() {
                           </PopoverTrigger>
                           <PopoverContent className="w-80">
                             <div className="grid gap-4">
-                              {Object.entries(formData.groupSize).map(
-                                ([type, count]) => (
-                                  <div
-                                    key={type}
-                                    className="flex items-center justify-between"
-                                  >
-                                    <span className="capitalize">{type}</span>
-                                    <div className="flex items-center space-x-2">
-                                      <Button
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={() =>
-                                          handleGroupSizeChange(
-                                            type,
-                                            "subtract",
-                                          )
-                                        }
-                                      >
-                                        <MinusIcon className="h-4 w-4" />
-                                      </Button>
-                                      <span className="w-8 text-center">
-                                        {count}
-                                      </span>
-                                      <Button
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={() =>
-                                          handleGroupSizeChange(type, "add")
-                                        }
-                                      >
-                                        <PlusIcon className="h-4 w-4" />
-                                      </Button>
-                                    </div>
+                              {(
+                                Object.keys(
+                                  formData.groupSize,
+                                ) as GroupSizeType[]
+                              ).map((type) => (
+                                <div
+                                  key={type}
+                                  className="flex items-center justify-between"
+                                >
+                                  <span className="capitalize">{type}</span>
+                                  <div className="flex items-center space-x-2">
+                                    <Button
+                                      variant="outline"
+                                      size="icon"
+                                      onClick={() =>
+                                        handleGroupSizeChange(type, "subtract")
+                                      }
+                                    >
+                                      <MinusIcon className="h-4 w-4" />
+                                    </Button>
+                                    <span>{formData.groupSize[type]}</span>
+                                    <Button
+                                      variant="outline"
+                                      size="icon"
+                                      onClick={() =>
+                                        handleGroupSizeChange(type, "add")
+                                      }
+                                    >
+                                      <PlusIcon className="h-4 w-4" />
+                                    </Button>
                                   </div>
-                                ),
-                              )}
+                                </div>
+                              ))}
                             </div>
                           </PopoverContent>
                         </Popover>
