@@ -28,6 +28,13 @@ interface FormData {
   travelerTypes: string[];
 }
 
+interface FormErrors {
+  destination: string;
+  dateRange: string;
+  groupSize: string;
+  travelerTypes: string;
+}
+
 const travelerTypes = [
   { id: "adventure", name: "The Adventure Seeker", icon: "🏔️" },
   { id: "culture", name: "The Culture Enthusiast", icon: "🏛️" },
@@ -56,12 +63,19 @@ export default function Component() {
     dreamTrip: "",
     travelerTypes: [],
   });
+  const [errors, setErrors] = useState<FormErrors>({
+    destination: "",
+    dateRange: "",
+    groupSize: "",
+    travelerTypes: "",
+  });
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
@@ -69,7 +83,9 @@ export default function Component() {
       ...prev,
       dateRange: range,
     }));
+    setErrors((prev) => ({ ...prev, dateRange: "" }));
   };
+
   const handleGroupSizeChange = (
     type: GroupSizeType,
     operation: "add" | "subtract",
@@ -84,6 +100,7 @@ export default function Component() {
         ),
       },
     }));
+    setErrors((prev) => ({ ...prev, groupSize: "" }));
   };
 
   const handleTravelerTypeToggle = (id: string) => {
@@ -93,10 +110,55 @@ export default function Component() {
         ? prev.travelerTypes.filter((type) => type !== id)
         : [...prev.travelerTypes, id],
     }));
+    setErrors((prev) => ({ ...prev, travelerTypes: "" }));
   };
 
-  const handleNext = () => setStep((prev) => Math.min(prev + 1, 3));
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {
+      destination: "",
+      dateRange: "",
+      groupSize: "",
+      travelerTypes: "",
+    };
+
+    if (!formData.destination) {
+      newErrors.destination = "Please enter a destination";
+    }
+
+    if (!formData.dateRange?.from || !formData.dateRange.to) {
+      newErrors.dateRange = "Please select a date range";
+    }
+
+    const totalTravelers = Object.values(formData.groupSize).reduce(
+      (sum, count) => sum + count,
+      0,
+    );
+    if (totalTravelers === 0) {
+      newErrors.groupSize = "Please select at least one traveler";
+    }
+
+    if (step === 2 && formData.travelerTypes.length === 0) {
+      newErrors.travelerTypes = "Please select at least one traveler type";
+    }
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
+  const handleNext = () => {
+    if (validateForm()) {
+      setStep((prev) => Math.min(prev + 1, 3));
+    }
+  };
+
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 1));
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      console.log(formData);
+      // Here you would typically send the form data to your backend
+    }
+  };
 
   const totalTravelers = Object.values(formData.groupSize).reduce(
     (sum, count) => sum + count,
@@ -104,26 +166,26 @@ export default function Component() {
   );
 
   return (
-    <div className="flex h-screen bg-background">
-      <div className="flex w-1/2 items-center justify-center rounded-r-3xl bg-muted p-6">
+    <div className="flex min-h-screen flex-col bg-background lg:flex-row">
+      <div className="flex w-full items-center justify-center bg-muted p-6 lg:w-1/2 lg:rounded-r-3xl">
         <img
           src={stepImages[step - 1]}
           alt={`Step ${step} illustration`}
-          className="max-h-full max-w-full rounded-lg object-contain shadow-lg"
+          className="max-h-[300px] max-w-full rounded-lg object-contain shadow-lg lg:max-h-full"
         />
       </div>
-      <div className="flex w-1/2 flex-col">
+      <div className="flex w-full flex-col lg:w-1/2">
         <div className="flex-grow overflow-y-auto p-6">
           <div className="mx-auto max-w-2xl space-y-6">
-            <h1 className="mb-8 text-left text-4xl font-bold">
+            <h1 className="mb-8 text-left text-3xl font-bold lg:text-4xl">
               Create your travel persona
             </h1>
-            <p className="mb-8 text-left text-muted-foreground">
+            <p className="mb-8 text-left text-sm text-muted-foreground lg:text-base">
               Let&apos;s get personal! Tell me a bit about your travel style and
               preferences so I can whip up some spot-on destination and
               experience suggestions just for you.
             </p>
-            <p className="mt-4 text-left text-sm text-muted-foreground">
+            <p className="mt-4 text-left text-xs text-muted-foreground lg:text-sm">
               {step} of 3 steps • Approximately 4 minutes
             </p>
             <AnimatePresence mode="wait">
@@ -138,7 +200,7 @@ export default function Component() {
                   <div className="space-y-6">
                     <div>
                       <Label htmlFor="destination">
-                        Where do you want to go?
+                        Where do you want to go? *
                       </Label>
                       <Input
                         id="destination"
@@ -147,9 +209,14 @@ export default function Component() {
                         value={formData.destination}
                         onChange={handleInputChange}
                       />
+                      {errors.destination && (
+                        <p className="mt-1 text-sm text-red-500">
+                          {errors.destination}
+                        </p>
+                      )}
                     </div>
                     <div>
-                      <Label>Travel Dates</Label>
+                      <Label>Travel Dates *</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
@@ -162,10 +229,10 @@ export default function Component() {
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {formData.dateRange?.from ? (
                               formData.dateRange.to ? (
-                                <>
+                                <span>
                                   {format(formData.dateRange.from, "LLL dd, y")}{" "}
                                   - {format(formData.dateRange.to, "LLL dd, y")}
-                                </>
+                                </span>
                               ) : (
                                 format(formData.dateRange.from, "LLL dd, y")
                               )
@@ -185,27 +252,18 @@ export default function Component() {
                           />
                         </PopoverContent>
                       </Popover>
+                      {errors.dateRange && (
+                        <p className="mt-1 text-sm text-red-500">
+                          {errors.dateRange}
+                        </p>
+                      )}
                     </div>
                     <div>
-                      <Label>Group Size</Label>
+                      <Label>Group Size *</Label>
                       <div className="mt-2 flex items-center space-x-4">
                         <Popover>
                           <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className="w-full"
-                              onClick={() => {
-                                const types = [
-                                  "adults",
-                                  "children",
-                                  "pets",
-                                  "seniors",
-                                ];
-                                const popover =
-                                  document.getElementById("group-size-popover");
-                                if (popover) popover.click();
-                              }}
-                            >
+                            <Button variant="outline" className="w-full">
                               <Users className="mr-2 h-4 w-4" />
                               {totalTravelers}{" "}
                               {totalTravelers === 1 ? "Traveler" : "Travelers"}
@@ -250,6 +308,11 @@ export default function Component() {
                           </PopoverContent>
                         </Popover>
                       </div>
+                      {errors.groupSize && (
+                        <p className="mt-1 text-sm text-red-500">
+                          {errors.groupSize}
+                        </p>
+                      )}
                     </div>
                     <div>
                       <Label htmlFor="dreamTrip">
@@ -268,8 +331,8 @@ export default function Component() {
                 )}
                 {step === 2 && (
                   <div className="space-y-4">
-                    <Label>Who do you relate to?</Label>
-                    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+                    <Label>Who do you relate to? *</Label>
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                       {travelerTypes.map((type) => (
                         <Card
                           key={type.id}
@@ -288,20 +351,23 @@ export default function Component() {
                         </Card>
                       ))}
                     </div>
+                    {errors.travelerTypes && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors.travelerTypes}
+                      </p>
+                    )}
                   </div>
                 )}
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
-        <div className="p-4">
+        <div className="border-t p-4">
           <div className="mx-auto flex max-w-2xl items-center justify-between">
             {step > 1 ? (
-              <div>
-                <Button onClick={handlePrev} variant="outline">
-                  Previous
-                </Button>
-              </div>
+              <Button onClick={handlePrev} variant="outline">
+                Previous
+              </Button>
             ) : (
               <div></div>
             )}
@@ -310,7 +376,7 @@ export default function Component() {
                 Next
               </Button>
             ) : (
-              <Button onClick={() => console.log(formData)} className="ml-auto">
+              <Button onClick={handleSubmit} className="ml-auto">
                 Submit
               </Button>
             )}
