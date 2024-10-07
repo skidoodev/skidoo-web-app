@@ -4,8 +4,8 @@ const Cards = () => {
   return (
     <section className="py-20 bg-[#1C423C]">
       <div className="flex justify-center items-center flex-col my-20">
-          <h1 className="text-5xl text-[#FBEEAF] font-bold mx-auto lg:mx-20 2xl:mx-60">DE FINIBUS BONORUM ET MALORUM</h1>
-          <p className="text-xl text-[#FBEEAF] text-center font-semibold mx-auto lg:mx-40 2xl:mx-60 my-4">Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est.</p>
+          <h1 className="text-5xl text-[#FBEEAF] text-center font-bold mx-8 lg:mx-20 2xl:mx-60">DE FINIBUS BONORUM ET MALORUM</h1>
+          <p className="text-xl text-[#FBEEAF] text-center font-semibold mx-8 lg:mx-40 2xl:mx-60 my-6">Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est.</p>
       </div>
 
       <div className="flex flex-wrap justify-center mx-10 lg:mx-40 2xl:mx-72 gap-6">
