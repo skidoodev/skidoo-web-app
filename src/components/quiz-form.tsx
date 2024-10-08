@@ -175,10 +175,10 @@ export default function Component() {
         />
       </div>
       <div className="flex w-full flex-col lg:w-1/2">
-        <div className="flex-grow overflow-y-auto p-6">
+        <div className="flex-grow flex items-center overflow-y-auto p-6">
           <div className="mx-auto max-w-2xl space-y-6">
-            <h1 className="mb-8 text-left text-3xl font-bold lg:text-4xl">
-              Create your travel persona
+            <h1 className="mb-6 text-left text-[#1C423C] text-3xl font-bold lg:text-4xl">
+              CREATE YOUR TRAVEL PERSONA
             </h1>
             <p className="mb-8 text-left text-sm text-muted-foreground lg:text-base">
               Let&apos;s get personal! Tell me a bit about your travel style and
@@ -362,7 +362,7 @@ export default function Component() {
             </AnimatePresence>
           </div>
         </div>
-        <div className="border-t p-4">
+        <div className="pb-4 lg:pb-8 px-4">
           <div className="mx-auto flex max-w-2xl items-center justify-between">
             {step > 1 ? (
               <Button onClick={handlePrev} variant="outline">
