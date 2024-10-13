@@ -17,12 +17,13 @@ import { format } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { type DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
+import { api } from "@/trpc/react";
 
 type GroupSizeType = "adults" | "children" | "pets" | "seniors";
 
 interface FormData {
   destination: string;
-  dateRange: DateRange | undefined;
+  dateRange: DateRange;
   groupSize: Record<GroupSizeType, number>;
   dreamTrip: string;
   travelerTypes: string[];
@@ -152,28 +153,12 @@ export default function Component() {
   };
 
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 1));
+  const formMutation = api.travel_form.create.useMutation()
 
   const handleSubmit = async () => {
+
     if (validateForm()) {
-      try {
-        const response = await fetch('/api/submitTravelForm', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to submit form');
-        }
-  
-        const data = await response.json();
-        console.log('Form submitted successfully:', data);
-  
-      } catch (error) {
-        console.error('Error submitting form:', error);
-      }
+      formMutation.mutate({ destination: formData.destination, adults: formData.groupSize.adults, children: formData.groupSize.children, pets: formData.groupSize.pets, seniors: formData.groupSize.seniors, description: formData.dreamTrip, startDate: formData.dateRange.from!, endDate: formData.dateRange.to!, travelerTypes: formData.travelerTypes })
     }
   };
 
