@@ -1,8 +1,9 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { pgTable, text, integer, date, serial, array } from "drizzle-orm/pg-core";
+import { text, integer } from "drizzle-orm/sqlite-core";
 import { sqliteTableCreator } from "drizzle-orm/sqlite-core";
+import { createId } from "@paralleldrive/cuid2";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -14,6 +15,25 @@ import { sqliteTableCreator } from "drizzle-orm/sqlite-core";
 export const createTable = sqliteTableCreator(
   (name) => `skidoo-web-app_${name}`,
 );
+
+export const travelForm = createTable(
+  'travel_form',
+
+  {
+  id: text("id", { length: 256 }).primaryKey().notNull().$defaultFn(createId),
+  destination: text("destination").notNull(),
+
+  startDate: text("start_date").notNull(),
+  endDate: text("end_date").notNull(),
+
+  adults: integer("adults").notNull(),
+  children: integer("children").notNull(),
+  pets: integer("pets").notNull(),
+  seniors: integer("seniors").notNull(),
+
+  description: text("description"),
+  travelerTypes: text("traveler_types").notNull(),
+});
 
 // export const posts = createTable(
 //   "post",
@@ -29,16 +49,3 @@ export const createTable = sqliteTableCreator(
 //     nameIndex: index("name_idx").on(example.name),
 //   }),
 // );
-
-export const travelForm = pgTable('travel_form', {
-  id: serial("id").primaryKey(),
-  destination: text("destination").notNull(),
-  startDate: date("start_date").notNull(),
-  endDate: date("end_date").notNull(),
-  adults: integer("adults").notNull(),
-  children: integer("children").notNull(),
-  pets: integer("pets").notNull(),
-  seniors: integer("seniors").notNull(),
-  description: text("description"),
-  travelerTypes: array(text("traveler_types")).notNull()
-});

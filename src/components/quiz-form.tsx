@@ -153,10 +153,27 @@ export default function Component() {
 
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 1));
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateForm()) {
-      console.log(formData);
-      // Here you would typically send the form data to your backend
+      try {
+        const response = await fetch('/api/submitTravelForm', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to submit form');
+        }
+  
+        const data = await response.json();
+        console.log('Form submitted successfully:', data);
+  
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
     }
   };
 
