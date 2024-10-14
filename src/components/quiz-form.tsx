@@ -59,7 +59,7 @@ export default function Component() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     destination: "",
-    dateRange: undefined,
+    dateRange: {} as DateRange,
     groupSize: { adults: 1, children: 0, pets: 0, seniors: 0 },
     dreamTrip: "",
     travelerTypes: [],
@@ -79,7 +79,7 @@ export default function Component() {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleDateRangeChange = (range: DateRange | undefined) => {
+  const handleDateRangeChange = (range: DateRange) => {
     setFormData((prev) => ({
       ...prev,
       dateRange: range,
@@ -126,8 +126,16 @@ export default function Component() {
       newErrors.destination = "Please enter a destination";
     }
 
-    if (!formData.dateRange?.from || !formData.dateRange.to) {
+    if (!formData.dateRange.from || !formData.dateRange.to) {
       newErrors.dateRange = "Please select a date range";
+    }
+
+    if (!formData.dateRange.from) {
+      newErrors.dateRange = "Please select a start date";
+    }
+
+    if (!formData.dateRange.to) {
+      newErrors.dateRange = "Please select a end date";
     }
 
     const totalTravelers = Object.values(formData.groupSize).reduce(
@@ -153,12 +161,21 @@ export default function Component() {
   };
 
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 1));
-  const formMutation = api.travel_form.create.useMutation()
+  const formMutation = api.travel_form.create.useMutation();
 
   const handleSubmit = async () => {
-
     if (validateForm()) {
-      formMutation.mutate({ destination: formData.destination, adults: formData.groupSize.adults, children: formData.groupSize.children, pets: formData.groupSize.pets, seniors: formData.groupSize.seniors, description: formData.dreamTrip, startDate: formData.dateRange.from!, endDate: formData.dateRange.to!, travelerTypes: formData.travelerTypes })
+      formMutation.mutate({
+        destination: formData.destination,
+        adults: formData.groupSize.adults,
+        children: formData.groupSize.children,
+        pets: formData.groupSize.pets,
+        seniors: formData.groupSize.seniors,
+        description: formData.dreamTrip,
+        startDate: formData.dateRange.from!,
+        endDate: formData.dateRange.to!,
+        travelerTypes: formData.travelerTypes,
+      });
     }
   };
 
@@ -177,9 +194,9 @@ export default function Component() {
         />
       </div>
       <div className="flex w-full flex-col lg:w-1/2">
-        <div className="flex-grow flex items-center overflow-y-auto p-6">
+        <div className="flex flex-grow items-center overflow-y-auto p-6">
           <div className="mx-auto max-w-2xl space-y-6">
-            <h1 className="mb-6 text-left text-[#1C423C] text-3xl font-bold lg:text-4xl">
+            <h1 className="mb-6 text-left text-3xl font-bold text-[#1C423C] lg:text-4xl">
               CREATE YOUR TRAVEL PERSONA
             </h1>
             <p className="mb-8 text-left text-sm text-muted-foreground lg:text-base">
@@ -247,7 +264,7 @@ export default function Component() {
                           <Calendar
                             initialFocus
                             mode="range"
-                            defaultMonth={formData.dateRange?.from}
+                            defaultMonth={formData.dateRange.from}
                             selected={formData.dateRange}
                             onSelect={handleDateRangeChange}
                             numberOfMonths={2}
@@ -364,7 +381,7 @@ export default function Component() {
             </AnimatePresence>
           </div>
         </div>
-        <div className="pb-4 lg:pb-8 px-4">
+        <div className="px-4 pb-4 lg:pb-8">
           <div className="mx-auto flex max-w-2xl items-center justify-between">
             {step > 1 ? (
               <Button onClick={handlePrev} variant="outline">

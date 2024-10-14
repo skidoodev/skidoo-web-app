@@ -16,7 +16,7 @@ export const travelFormRouter = createTRPCRouter({
         seniors: z.number().min(0),
         description: z.string().optional(),
         travelerTypes: z.array(z.string()).min(1),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(travelForm).values({
@@ -28,13 +28,11 @@ export const travelFormRouter = createTRPCRouter({
         pets: input.pets,
         seniors: input.seniors,
         description: input.description ?? "",
-        travelerTypes: input.travelerTypes
+        travelerTypes: input.travelerTypes,
       });
+
+      //TODO: should fire email to hello@theskidoo.com with all the input data
+
       return { message: "Travel form submitted successfully!" };
     }),
-  getLatest: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.travelForm.findFirst({
-      orderBy: (travelForm, { desc }) => [desc(travelForm.startDate)],
-    });
-  }),
 });
