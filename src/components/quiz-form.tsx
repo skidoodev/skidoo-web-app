@@ -18,6 +18,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { type DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
 import { api } from "@/trpc/react";
+import { Stepper } from "./sections/stepper";
 
 type GroupSizeType = "adults" | "children" | "pets" | "seniors";
 
@@ -193,7 +194,7 @@ export default function Component() {
           className="max-h-[300px] max-w-full rounded-lg object-contain shadow-lg lg:max-h-full"
         />
       </div>
-      <div className="flex w-full flex-col lg:w-1/2">
+      <div className="flex w-full flex-col lg:w-1/2">    
         <div className="flex flex-grow items-center overflow-y-auto p-6">
           <div className="mx-auto max-w-2xl space-y-6">
             <h1 className="mb-6 text-left text-3xl font-bold text-[#1C423C] lg:text-4xl">
@@ -388,8 +389,12 @@ export default function Component() {
                 Previous
               </Button>
             ) : (
-              <div></div>
+              <div className="w-[72px]"></div>
             )}
+            {/* Add Stepper Component */}
+            <div className="flex-grow flex justify-center">
+              <Stepper currentStep={step - 1} />
+            </div>
             {step < 2 ? (
               <Button onClick={handleNext} className="ml-auto">
                 Next
