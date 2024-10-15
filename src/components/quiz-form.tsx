@@ -80,12 +80,14 @@ export default function Component() {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleDateRangeChange = (range: DateRange) => {
-    setFormData((prev) => ({
-      ...prev,
-      dateRange: range,
-    }));
-    setErrors((prev) => ({ ...prev, dateRange: "" }));
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    if (range) {
+      setFormData((prev) => ({
+        ...prev,
+        dateRange: range,
+      }));
+      setErrors((prev) => ({ ...prev, dateRange: "" }));
+    }
   };
 
   const handleGroupSizeChange = (
