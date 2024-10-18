@@ -44,4 +44,6 @@ export const travelForm = createTable("travel_form", {
     .notNull()
     .$type<string[]>()
     .default(sql`'[]'`),
+
+  email: text("email", { length: 256 })
 });

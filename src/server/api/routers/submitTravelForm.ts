@@ -16,6 +16,7 @@ export const travelFormRouter = createTRPCRouter({
         seniors: z.number().min(0),
         description: z.string().optional(),
         travelerTypes: z.array(z.string()).min(1),
+        email: z.string().email()
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -29,6 +30,7 @@ export const travelFormRouter = createTRPCRouter({
         seniors: input.seniors,
         description: input.description ?? "",
         travelerTypes: input.travelerTypes,
+        email: input.email
       });
 
       //TODO: should fire email to hello@theskidoo.com with all the input data
