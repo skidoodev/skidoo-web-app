@@ -62,10 +62,10 @@ export default function Header() {
 
             <div className="flex gap-2">
               <Link
-                href="/login"
+                href="/sign-in"
                 className={cn(
                   buttonVariants({ variant: "outline" }),
-                  "flex w-full gap-2 border shadow-[2px_2px_0px_0px_#1C423C] sm:w-auto",
+                  "flex w-full gap-2 border shadow-[2px_2px_0px_0px_#1C423C] sm:w-auto hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0px_0px_#1C423C] transition-all",
                 )}
               >
                 Login
@@ -74,7 +74,7 @@ export default function Header() {
                 href="/quiz"
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  "flex w-full gap-2 border shadow-[2px_2px_0px_0px_#1C423C] sm:w-auto",
+                  "flex w-full gap-2 border shadow-[2px_2px_0px_0px_#1C423C] sm:w-auto hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0px_0px_#1C423C] transition-all",
                 )}
               >
                 Get Started

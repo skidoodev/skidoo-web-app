@@ -28,7 +28,7 @@ export const Features = () => {
             </div>
             <Image
               className="absolute -right-20 top-40 mt-12 hidden rounded-t-3xl shadow-2xl transition group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-110 sm:block"
-              src="/demo.png"
+              src=""
               alt="My Projects"
               quality={95}
               width={640}
@@ -50,7 +50,7 @@ export const Features = () => {
             </div>
             <Image
               className="absolute -right-20 top-40 mt-12 hidden rounded-t-3xl shadow-2xl transition group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-110 sm:block"
-              src="/demo.png"
+              src=""
               alt="My Projects"
               quality={95}
               width={640}
@@ -72,7 +72,7 @@ export const Features = () => {
             </div>
             <Image
               className="absolute -right-20 top-40 mt-12 hidden rounded-t-3xl shadow-2xl transition group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-110 sm:block"
-              src="/demo.png"
+              src=""
               alt="My Projects"
               quality={95}
               width={640}

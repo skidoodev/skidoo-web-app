@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,6 +19,9 @@ import { type DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
 import { api } from "@/trpc/react";
 import { Stepper } from "./sections/stepper";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 type GroupSizeType = "adults" | "children" | "pets" | "seniors";
 
@@ -60,7 +63,24 @@ const stepImages = [
 ];
 
 export default function Component() {
+  const { user } = useUser();
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({ ...prev, email: user.primaryEmailAddress?.emailAddress || "" }));
+      setIsSignUp(true);
+    }
+  }, [user]);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    const stepParam = searchParams.get('step');
+    setStep(stepParam ? parseInt(stepParam, 10) : 0);
+  }, [searchParams]);
+
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     destination: "",
@@ -78,6 +98,12 @@ export default function Component() {
     email: ""
   });
 
+  const handleSignUpClick = () => {
+    const redirectUrl = '/quiz?step=1';
+    const encodedRedirect = encodeURIComponent(redirectUrl);
+    router.push(`/sign-up?redirect=${encodedRedirect}`);
+  };
+  
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -224,20 +250,16 @@ export default function Component() {
                     </div>
                     <div className="flex flex-col space-y-4">
                       <Button
-                        onClick={() => {
-                          setIsSignUp(true);
-                          setStep(1);
-                        }}
-                        className="bg-[#1C423C] text-white"
+                        onClick={handleSignUpClick}
+                        className="bg-blue-500 text-white"
                       >
                         Sign Up
                       </Button>
                       <Button
                         onClick={() => {
-                          setIsSignUp(false);
                           setStep(1);
                         }}
-                        className="text-[#1C423C"
+                        className="text-[#1C423C]"
                       >
                         Guest User
                       </Button>
@@ -247,9 +269,20 @@ export default function Component() {
                 {step === 1 && (
                   <div className="space-y-4">
                     <div>
-                    <Label htmlFor="email">Email Address *</Label>
-                    {isSignUp ? (
-                      <div>
+                      <Label htmlFor="email">Email Address *</Label>
+                      {isSignUp ? (
+                        <div>
+                          <Input
+                            onClick={() => setIsSignUp(false)}
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            readOnly
+                            className="bg-gray-100"
+                          />
+                        </div>
+                      ) : (
                         <Input
                           type="email"
                           id="email"
@@ -258,26 +291,10 @@ export default function Component() {
                           onChange={handleInputChange}
                           placeholder="Enter your email address"
                         />
-                        <Button
-                          onClick={() => setIsSignUp(false)}
-                          className="mt-2 text-sm"
-                        >
-                          Edit Email
-                        </Button>
-                      </div>
-                    ) : (
-                      <Input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="Enter your email address"
-                      />
-                    )}
-                    {errors.email && (
-                      <p className="text-red-500 text-sm">{errors.email}</p>
-                    )}
+                      )}
+                      {errors.email && (
+                        <p className="text-red-500 text-sm">{errors.email}</p>
+                      )}
                     </div>
                     <div>
                       <Label htmlFor="destination">Destination *</Label>
@@ -403,7 +420,7 @@ export default function Component() {
                         placeholder="Tell us about your ideal vacation..."
                         value={formData.dreamTrip}
                         onChange={handleInputChange}
-                        className="h-32"
+                        className="h-20"
                       />
                     </div>
                   </div>
@@ -453,7 +470,7 @@ export default function Component() {
                 <Stepper currentStep={step} />
               </div>
 
-              {step >= 1 && step < 3 && (
+              {step >= 1 && step < 2 && (
                 <Button
                   onClick={handleNext}
                   className="text-sm lg:text-base bg-blue-500 text-white"
@@ -462,7 +479,7 @@ export default function Component() {
                 </Button>
               )}
 
-              {step === 3 && (
+              {step === 2 && (
                 <Button
                   onClick={handleSubmit}
                   className="text-sm lg:text-base bg-blue-500 text-white"

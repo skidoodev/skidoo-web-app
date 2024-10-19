@@ -6,6 +6,7 @@ import { Poppins } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { constructMetadata } from "@/lib/utils";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,7 +14,7 @@ const inter = Inter({
 });
 
 const poppins = Poppins({
-  weight: ["500", "600", "900"], // Customize the weights you need
+  weight: ["500", "600", "900"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
@@ -35,12 +36,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className={`mx-auto min-h-screen w-full scroll-smooth bg-background font-sans antialiased ${poppins.variable}`}
-      >
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-      </body>
-    </html>
+    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY} afterSignOutUrl="/sign-in">
+      <html lang="en">
+        <body
+          className={`mx-auto min-h-screen w-full scroll-smooth bg-background font-sans antialiased ${poppins.variable}`}
+        >
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
