@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { travelForm } from "@/server/db/schema";
-import { createId } from "@paralleldrive/cuid2";
 
 export const travelFormRouter = createTRPCRouter({
   create: publicProcedure

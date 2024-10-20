@@ -98,10 +98,10 @@ export default function Component() {
     email: ""
   });
 
-  const handleSignUpClick = () => {
+  const handleSignInClick = () => {
     const redirectUrl = '/quiz?step=1';
     const encodedRedirect = encodeURIComponent(redirectUrl);
-    router.push(`/sign-up?redirect=${encodedRedirect}`);
+    router.push(`/sign-in?redirect=${encodedRedirect}`);
   };
   
   const handleInputChange = (
@@ -194,24 +194,37 @@ export default function Component() {
   };
 
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 0));
+
   const formMutation = api.travel_form.create.useMutation();
 
   const handleSubmit = async () => {
     if (validateForm()) {
-      formMutation.mutate({
-        destination: formData.destination,
-        adults: formData.groupSize.adults,
-        children: formData.groupSize.children,
-        pets: formData.groupSize.pets,
-        seniors: formData.groupSize.seniors,
-        description: formData.dreamTrip,
-        startDate: formData.dateRange.from!,
-        endDate: formData.dateRange.to!,
-        travelerTypes: formData.travelerTypes,
-        email: formData.email,
-      });
+      try {
+        const submissionData = {
+          destination: formData.destination,
+          adults: formData.groupSize.adults,
+          children: formData.groupSize.children,
+          pets: formData.groupSize.pets,
+          seniors: formData.groupSize.seniors,
+          description: formData.dreamTrip,
+          startDate: formData.dateRange.from!,
+          endDate: formData.dateRange.to!,
+          travelerTypes: formData.travelerTypes,
+          email: formData.email,
+        };
+  
+        // Call the mutation to submit the form data to the database
+        await formMutation.mutateAsync(submissionData);
+  
+        console.log("Travel form submitted successfully!");
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        console.log("Failed to submit form. Please try again.");
+      }
+    } else {
+      console.log("Please fill in all required fields correctly.");
     }
-  };
+  };  
 
   const totalTravelers = Object.values(formData.groupSize).reduce(
     (sum, count) => sum + count,
@@ -250,10 +263,10 @@ export default function Component() {
                     </div>
                     <div className="flex flex-col space-y-4">
                       <Button
-                        onClick={handleSignUpClick}
+                        onClick={handleSignInClick}
                         className="bg-blue-500 text-white"
                       >
-                        Sign Up
+                        Sign In
                       </Button>
                       <Button
                         onClick={() => {
