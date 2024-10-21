@@ -22,6 +22,15 @@ import { Stepper } from "./sections/stepper";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { sendTravelFormEmail } from "@/app/api/send/route";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 type GroupSizeType = "adults" | "children" | "pets" | "seniors";
 
@@ -74,6 +83,7 @@ export default function Component() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const stepParam = searchParams.get('step');
@@ -213,18 +223,22 @@ export default function Component() {
           email: formData.email,
         };
   
-        // Call the mutation to submit the form data to the database
+        console.log("Submitting form data:", submissionData);
         await formMutation.mutateAsync(submissionData);
   
-        console.log("Travel form submitted successfully!");
+        console.log("Form submitted successfully");
+        setIsDialogOpen(true); // Open the dialog
+        console.log("Dialog should be open now");
+
+        await sendTravelFormEmail(submissionData);
+
       } catch (error) {
         console.error("Error submitting form:", error);
-        console.log("Failed to submit form. Please try again.");
       }
     } else {
-      console.log("Please fill in all required fields correctly.");
+      console.log("Form validation failed");
     }
-  };  
+  };
 
   const totalTravelers = Object.values(formData.groupSize).reduce(
     (sum, count) => sum + count,
@@ -504,6 +518,25 @@ export default function Component() {
           </div>
         </div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <DialogContent className="flex justify-center items-center">
+        <DialogHeader>
+          <DialogTitle>Form Submitted Successfully</DialogTitle>
+          <DialogDescription>
+            We will contact you within 24 hours.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button onClick={() => {
+            setIsDialogOpen(false);
+            router.push('/');
+          }}>
+            Back to Home
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
     </div>
   );
 }
