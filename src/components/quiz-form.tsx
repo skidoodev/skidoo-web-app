@@ -21,7 +21,7 @@ import { api } from "@/trpc/react";
 import { Stepper } from "./sections/stepper";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { sendTravelFormEmail } from "@/app/api/send/route";
 import {
   Dialog,
@@ -75,7 +75,10 @@ export default function Component() {
   const { user } = useUser();
   useEffect(() => {
     if (user) {
-      setFormData((prev) => ({ ...prev, email: user.primaryEmailAddress?.emailAddress || "" }));
+      setFormData((prev) => ({
+        ...prev,
+        email: user.primaryEmailAddress?.emailAddress || "",
+      }));
       setIsSignUp(true);
     }
   }, [user]);
@@ -86,10 +89,9 @@ export default function Component() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
-    const stepParam = searchParams.get('step');
+    const stepParam = searchParams.get("step");
     setStep(stepParam ? parseInt(stepParam, 10) : 0);
   }, [searchParams]);
-
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -98,22 +100,22 @@ export default function Component() {
     groupSize: { adults: 1, children: 0, pets: 0, seniors: 0 },
     dreamTrip: "",
     travelerTypes: [],
-    email: ""
+    email: "",
   });
   const [errors, setErrors] = useState<FormErrors>({
     destination: "",
     dateRange: "",
     groupSize: "",
     travelerTypes: "",
-    email: ""
+    email: "",
   });
 
   const handleSignInClick = () => {
-    const redirectUrl = '/quiz?step=1';
+    const redirectUrl = "/quiz?step=1";
     const encodedRedirect = encodeURIComponent(redirectUrl);
     router.push(`/sign-in?redirect=${encodedRedirect}`);
   };
-  
+
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -222,16 +224,15 @@ export default function Component() {
           travelerTypes: formData.travelerTypes,
           email: formData.email,
         };
-  
+
         console.log("Submitting form data:", submissionData);
         await formMutation.mutateAsync(submissionData);
-  
+
         console.log("Form submitted successfully");
         setIsDialogOpen(true); // Open the dialog
         console.log("Dialog should be open now");
 
         await sendTravelFormEmail(submissionData);
-
       } catch (error) {
         console.error("Error submitting form:", error);
       }
@@ -276,13 +277,21 @@ export default function Component() {
                       Welcome! How would you like to continue?
                     </div>
                     <div className="flex flex-col space-y-4">
-                      <Button
+                      {/* <Button
                         onClick={handleSignInClick}
                         className="bg-blue-500 text-white"
                       >
                         Sign In
-                      </Button>
+                      </Button> */}
+                      <SignInButton
+                        mode="modal"
+                        fallbackRedirectUrl="/quiz?step=1"
+                        signUpFallbackRedirectUrl="/quiz?step=1"
+                      >
+                        <Button>Sign In</Button>
+                      </SignInButton>
                       <Button
+                        variant={"outline"}
                         onClick={() => {
                           setStep(1);
                         }}
@@ -320,7 +329,7 @@ export default function Component() {
                         />
                       )}
                       {errors.email && (
-                        <p className="text-red-500 text-sm">{errors.email}</p>
+                        <p className="text-sm text-red-500">{errors.email}</p>
                       )}
                     </div>
                     <div>
@@ -334,7 +343,7 @@ export default function Component() {
                         placeholder="Where would you like to go?"
                       />
                       {errors.destination && (
-                        <p className="text-red-500 text-sm">
+                        <p className="text-sm text-red-500">
                           {errors.destination}
                         </p>
                       )}
@@ -347,7 +356,8 @@ export default function Component() {
                             variant={"outline"}
                             className={cn(
                               "w-full justify-start text-left font-normal",
-                              !formData.dateRange.from && "text-muted-foreground",
+                              !formData.dateRange.from &&
+                                "text-muted-foreground",
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -376,7 +386,7 @@ export default function Component() {
                         </PopoverContent>
                       </Popover>
                       {errors.dateRange && (
-                        <p className="text-red-500 text-sm">
+                        <p className="text-sm text-red-500">
                           {errors.dateRange}
                         </p>
                       )}
@@ -454,53 +464,54 @@ export default function Component() {
                 )}
                 {step === 2 && (
                   <div className="space-y-4">
-                  <Label>Who do you relate to? *</Label>
-                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-                    {travelerTypes.map((type) => (
-                      <Card
-                        key={type.id}
-                        className={cn(
-                          "cursor-pointer transition-colors",
-                          formData.travelerTypes.includes(type.id)
-                            ? "bg-primary text-primary-foreground"
-                            : "hover:bg-muted",
-                        )}
-                        onClick={() => handleTravelerTypeToggle(type.id)}
-                      >
-                        <CardContent className="flex h-full flex-col items-center justify-center p-4 text-center">
-                          <span className="mb-2 text-4xl">{type.icon}</span>
-                          <span className="text-sm">{type.name}</span>
-                        </CardContent>
-                      </Card>
-                    ))}
+                    <Label>Who do you relate to? *</Label>
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+                      {travelerTypes.map((type) => (
+                        <Card
+                          key={type.id}
+                          className={cn(
+                            "cursor-pointer transition-colors",
+                            formData.travelerTypes.includes(type.id)
+                              ? "bg-primary text-primary-foreground"
+                              : "hover:bg-muted",
+                          )}
+                          onClick={() => handleTravelerTypeToggle(type.id)}
+                        >
+                          <CardContent className="flex h-full flex-col items-center justify-center p-4 text-center">
+                            <span className="mb-2 text-4xl">{type.icon}</span>
+                            <span className="text-sm">{type.name}</span>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                    {errors.travelerTypes && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors.travelerTypes}
+                      </p>
+                    )}
                   </div>
-                  {errors.travelerTypes && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {errors.travelerTypes}
-                    </p>
-                  )}
-                </div>
                 )}
               </motion.div>
             </AnimatePresence>
             <div className="flex justify-between">
               {step > 0 && (
                 <Button
+                  variant={"outline"}
                   onClick={handlePrev}
-                  className="text-sm lg:text-base text-[#1C423C]"
+                  className="text-sm text-[#1C423C] lg:text-base"
                 >
                   Back
                 </Button>
               )}
-              
-              <div className="flex-grow flex justify-center">
+
+              <div className="flex flex-grow justify-center">
                 <Stepper currentStep={step} />
               </div>
 
               {step >= 1 && step < 2 && (
                 <Button
                   onClick={handleNext}
-                  className="text-sm lg:text-base bg-blue-500 text-white"
+                  className="text-sm text-white lg:text-base"
                 >
                   Next
                 </Button>
@@ -509,7 +520,7 @@ export default function Component() {
               {step === 2 && (
                 <Button
                   onClick={handleSubmit}
-                  className="text-sm lg:text-base bg-blue-500 text-white"
+                  className="text-sm text-white lg:text-base"
                 >
                   Submit
                 </Button>
@@ -520,23 +531,25 @@ export default function Component() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogContent className="flex justify-center items-center">
-        <DialogHeader>
-          <DialogTitle>Form Submitted Successfully</DialogTitle>
-          <DialogDescription>
-            We will contact you within 24 hours.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button onClick={() => {
-            setIsDialogOpen(false);
-            router.push('/');
-          }}>
-            Back to Home
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <DialogContent className="flex items-center justify-center">
+          <DialogHeader>
+            <DialogTitle>Form Submitted Successfully</DialogTitle>
+            <DialogDescription>
+              We will contact you within 24 hours.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              onClick={() => {
+                setIsDialogOpen(false);
+                router.push("/");
+              }}
+            >
+              Back to Home
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
