@@ -22,7 +22,7 @@ import { Stepper } from "./sections/stepper";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { SignInButton, useUser } from "@clerk/nextjs";
-import { sendTravelFormEmail } from "@/app/api/send/route";
+// import { sendTravelFormEmail } from "@/app/api/send/route";
 import {
   Dialog,
   DialogContent,
@@ -232,7 +232,7 @@ export default function Component() {
         setIsDialogOpen(true); // Open the dialog
         console.log("Dialog should be open now");
 
-        await sendTravelFormEmail(submissionData);
+        // await sendTravelFormEmail(submissionData);
       } catch (error) {
         console.error("Error submitting form:", error);
       }
