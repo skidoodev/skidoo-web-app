@@ -11,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, MinusIcon, PlusIcon, Users } from "lucide-react";
+import { CalendarIcon, Loader2, MinusIcon, PlusIcon, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,15 +22,7 @@ import { Stepper } from "./sections/stepper";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { SignInButton, useUser } from "@clerk/nextjs";
-// import { sendTravelFormEmail } from "@/app/api/send/route";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { sendTravelFormEmail } from "@/app/api/send/route";
 
 type GroupSizeType = "adults" | "children" | "pets" | "seniors";
 
@@ -86,7 +78,6 @@ export default function Component() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(0);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const stepParam = searchParams.get("step");
@@ -109,12 +100,6 @@ export default function Component() {
     travelerTypes: "",
     email: "",
   });
-
-  const handleSignInClick = () => {
-    const redirectUrl = "/quiz?step=1";
-    const encodedRedirect = encodeURIComponent(redirectUrl);
-    router.push(`/sign-in?redirect=${encodedRedirect}`);
-  };
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -208,36 +193,40 @@ export default function Component() {
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 0));
 
   const formMutation = api.travel_form.create.useMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (validateForm()) {
-      try {
-        const submissionData = {
-          destination: formData.destination,
-          adults: formData.groupSize.adults,
-          children: formData.groupSize.children,
-          pets: formData.groupSize.pets,
-          seniors: formData.groupSize.seniors,
-          description: formData.dreamTrip,
-          startDate: formData.dateRange.from!,
-          endDate: formData.dateRange.to!,
-          travelerTypes: formData.travelerTypes,
-          email: formData.email,
-        };
-
-        console.log("Submitting form data:", submissionData);
-        await formMutation.mutateAsync(submissionData);
-
-        console.log("Form submitted successfully");
-        setIsDialogOpen(true); // Open the dialog
-        console.log("Dialog should be open now");
-
-        // await sendTravelFormEmail(submissionData);
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
-    } else {
+    if (!validateForm()) {
       console.log("Form validation failed");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const submissionData = {
+        destination: formData.destination,
+        adults: formData.groupSize.adults,
+        children: formData.groupSize.children,
+        pets: formData.groupSize.pets,
+        seniors: formData.groupSize.seniors,
+        description: formData.dreamTrip,
+        startDate: formData.dateRange.from!,
+        endDate: formData.dateRange.to!,
+        travelerTypes: formData.travelerTypes,
+        email: formData.email,
+      };
+
+      // Run both operations in parallel
+      await Promise.all([
+        formMutation.mutateAsync(submissionData),
+        sendTravelFormEmail(submissionData)
+      ]);
+      router.push('/success');
+
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setIsSubmitting(false);
     }
   };
 
@@ -277,12 +266,6 @@ export default function Component() {
                       Welcome! How would you like to continue?
                     </div>
                     <div className="flex flex-col space-y-4">
-                      {/* <Button
-                        onClick={handleSignInClick}
-                        className="bg-blue-500 text-white"
-                      >
-                        Sign In
-                      </Button> */}
                       <SignInButton
                         mode="modal"
                         fallbackRedirectUrl="/quiz?step=1"
@@ -519,37 +502,24 @@ export default function Component() {
 
               {step === 2 && (
                 <Button
-                  onClick={handleSubmit}
-                  className="text-sm text-white lg:text-base"
-                >
-                  Submit
-                </Button>
+                onClick={handleSubmit}
+                className="text-sm text-white lg:text-base"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  'Submit'
+                )}
+              </Button>
               )}
             </div>
           </div>
         </div>
       </div>
-
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="flex items-center justify-center">
-          <DialogHeader>
-            <DialogTitle>Form Submitted Successfully</DialogTitle>
-            <DialogDescription>
-              We will contact you within 24 hours.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              onClick={() => {
-                setIsDialogOpen(false);
-                router.push("/");
-              }}
-            >
-              Back to Home
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

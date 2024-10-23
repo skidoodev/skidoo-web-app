@@ -28,6 +28,12 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+      RESEND_API_KEY: z
+      .string()
+      .refine(
+        (str) => !str.includes("YOUR_RESEND_API_KEY"),
+        "You forgot to add Resend Key",
+      ),
   },
 
   /**
@@ -56,6 +62,7 @@ export const env = createEnv({
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    RESEND_API_KEY: process.env.RESEND_API_KEY
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

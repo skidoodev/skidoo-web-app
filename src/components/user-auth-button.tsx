@@ -1,12 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 
 export const UserAuthButton = () => {
   return (
-    <div>
+    <div className="flex justify-center items-center">
       <SignedIn>
         <UserButton />
       </SignedIn>

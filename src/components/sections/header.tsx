@@ -61,15 +61,6 @@ export default function Header() {
             {/* <nav className="mr-10"> <Menu /></nav> */}
 
             <div className="flex gap-2">
-              {/* <Link
-                href="/sign-up"
-                className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "flex w-full gap-2 border shadow-[2px_2px_0px_0px_#1C423C] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#1C423C] sm:w-auto",
-                )}
-              >
-                Sign up
-              </Link> */}
               <UserAuthButton />
               <Link
                 href="/quiz"
