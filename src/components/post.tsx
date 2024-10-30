@@ -7,6 +7,7 @@ import { urlFor } from "@/sanity/lib/image";
 import { useRouter } from 'next/navigation';
 import { type POST_QUERYResult } from "../../sanity.types";
 import { Button } from "./ui/button";
+import { IoLocationOutline } from "react-icons/io5";
 
 export function Post({ post }: { post: POST_QUERYResult }) {
   const router = useRouter();
@@ -32,12 +33,23 @@ export function Post({ post }: { post: POST_QUERYResult }) {
           </>
         )}
         
-        <div className="absolute bottom-0 left-0 right-0 p-8 text-center">
-          {title && (
-            <h1 className="text-5xl font-bold text-white drop-shadow-lg md:text-6xl lg:text-7xl">
-              {title}
-            </h1>
-          )}
+        <div className="absolute bottom-0 left-0 right-0 p-8">
+          <div className="mx-auto max-w-4xl">
+            {title && (
+              <h1 className="mb-2 text-4xl font-bold text-center text-white md:text-5xl lg:text-6xl">
+                {title}
+              </h1>
+            )}
+            {post.categories && (
+              <p className="flex justify-center items-center text-xl font-medium text-center text-gray-200">
+                <IoLocationOutline className="mr-1"/>
+                {post.categories.map((category) => category).join(", ")}
+              </p>
+            )}
+            {post.author?.name && (
+              <p className="text-lg font-medium text-center text-gray-300">By {post.author.name}</p>
+            )}
+          </div>
         </div>
       </div>
 

@@ -314,6 +314,8 @@ export type POSTS_QUERYResult = Array<{
       _type: "reference";
     };
   } | null;
+  categories?: Array<string | null>;
+  author?: { name: string } | null;
 }>;
 
 // Variable: POST_QUERY
@@ -365,6 +367,8 @@ export type POST_QUERYResult = {
     alt?: string;
     _type: "image";
   } | null;
+  categories?: Array<string | null>;
+  author?: { name: string } | null;
 } | null;
 
 // Query TypeMap
