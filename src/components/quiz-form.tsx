@@ -21,7 +21,7 @@ import { api } from "@/trpc/react";
 import { Stepper } from "./sections/stepper";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton, useAuth, useUser } from "@clerk/nextjs";
 import { sendTravelFormEmail } from "@/app/api/send/route";
 
 type GroupSizeType = "adults" | "children" | "pets" | "seniors";
@@ -155,6 +155,14 @@ export default function Component() {
       email: "",
     };
 
+    if (!isSignedIn && step === 1) {
+      if (!formData.email) {
+        newErrors.email = "Please enter an email address";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        newErrors.email = "Please enter a valid email address";
+      }
+    }
+
     if (step === 1) {
       if (!formData.email) {
         newErrors.email = "Please enter an email address";
@@ -165,6 +173,17 @@ export default function Component() {
     }
 
     if (!formData.dateRange.from || !formData.dateRange.to) {
+      newErrors.dateRange = "Please select a date range";
+    }
+
+    if (formData.dateRange.from && formData.dateRange.to) {
+      if (formData.dateRange.from > formData.dateRange.to) {
+        newErrors.dateRange = "End date must be after start date";
+      }
+      if (formData.dateRange.from < new Date()) {
+        newErrors.dateRange = "Start date cannot be in the past";
+      }
+    } else {
       newErrors.dateRange = "Please select a date range";
     }
 
@@ -192,17 +211,19 @@ export default function Component() {
 
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 0));
 
-  const formMutation = api.travel_form.create.useMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isSignedIn, userId } = useAuth();
+  
+  const guestFormMutation = api.travel_form.createAsGuest.useMutation();
+  const authenticatedFormMutation = api.travel_form.create.useMutation();
 
   const handleSubmit = async () => {
     if (!validateForm()) {
       console.log("Form validation failed");
       return;
     }
-
+  
     setIsSubmitting(true);
-
     try {
       const submissionData = {
         destination: formData.destination,
@@ -216,14 +237,21 @@ export default function Component() {
         travelerTypes: formData.travelerTypes,
         email: formData.email,
       };
-
-      // Run both operations in parallel
-      await Promise.all([
-        formMutation.mutateAsync(submissionData),
-        sendTravelFormEmail(submissionData)
-      ]);
+  
+      if (isSignedIn) {
+        const { email, ...authenticatedData } = submissionData;
+        await Promise.all([
+          authenticatedFormMutation.mutateAsync(authenticatedData),
+          sendTravelFormEmail(submissionData)
+        ]);
+      } else {
+        await Promise.all([
+          guestFormMutation.mutateAsync(submissionData),
+          sendTravelFormEmail(submissionData)
+        ]);
+      }
+  
       router.push('/success');
-
     } catch (error) {
       console.error("Error submitting form:", error);
       setIsSubmitting(false);
