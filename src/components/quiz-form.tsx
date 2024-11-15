@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -238,22 +238,21 @@ export default function Component() {
         email: formData.email,
       };
   
+      let result;
       if (isSignedIn) {
-        const { email, ...authenticatedData } = submissionData;
-        await Promise.all([
-          authenticatedFormMutation.mutateAsync(authenticatedData),
-          sendTravelFormEmail(submissionData)
-        ]);
+        result = await authenticatedFormMutation.mutateAsync(submissionData);
       } else {
-        await Promise.all([
-          guestFormMutation.mutateAsync(submissionData),
-          sendTravelFormEmail(submissionData)
-        ]);
+        result = await guestFormMutation.mutateAsync(submissionData);
       }
   
-      router.push('/success');
+      if (result.success) {
+        await sendTravelFormEmail(submissionData);
+        router.push('/success');
+      }
+      
     } catch (error) {
       console.error("Error submitting form:", error);
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -293,24 +292,9 @@ export default function Component() {
                     <div className="text-2xl font-semibold">
                       Welcome! How would you like to continue?
                     </div>
-                    <div className="flex flex-col space-y-4">
-                      <SignInButton
-                        mode="modal"
-                        fallbackRedirectUrl="/quiz?step=1"
-                        signUpFallbackRedirectUrl="/quiz?step=1"
-                      >
-                        <Button>Sign In</Button>
-                      </SignInButton>
-                      <Button
-                        variant={"outline"}
-                        onClick={() => {
-                          setStep(1);
-                        }}
-                        className="text-[#1C423C]"
-                      >
-                        Guest User
-                      </Button>
-                    </div>
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <AuthButtons onGuestClick={() => setStep(1)}/>
+                    </Suspense>
                   </div>
                 )}
                 {step === 1 && (
@@ -548,6 +532,27 @@ export default function Component() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+export function AuthButtons({ onGuestClick }: { onGuestClick: () => void }) {
+  return (
+    <div className="flex flex-col space-y-4">
+      <SignInButton
+        mode="modal"
+        fallbackRedirectUrl="/quiz?step=1"
+        signUpFallbackRedirectUrl="/quiz?step=1"
+      >
+        <Button>Sign In</Button>
+      </SignInButton>
+      <Button
+        variant="outline"
+        onClick={onGuestClick}
+        className="text-[#1C423C]"
+      >
+        Guest User
+      </Button>
     </div>
   );
 }

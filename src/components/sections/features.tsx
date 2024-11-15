@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export const Features = () => {
   return (
-    <section className="pb-40 pt-20">
+    <section className="py-20">
       <div className="my-20 flex flex-col items-center justify-center">
         <h1 className="text-5xl text-center font-bold text-[#1C423C] mx-8 lg:mx-20 2xl:mx-60">
           DE FINIBUS BONORUM ET MALORUM
