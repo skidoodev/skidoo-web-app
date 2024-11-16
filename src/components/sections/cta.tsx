@@ -9,11 +9,11 @@ const CTA = () => {
         <h3 className="mx-16 text-lg font-semibold">
           LOREM IPSUM DOLOR SIT AMET.
         </h3>
-        <h1 className="mx-auto my-10 text-5xl font-black sm:text-7xl lg:mx-20 lg:text-7xl 2xl:mx-60">
+        <h1 className="mx-8 my-10 text-5xl font-black sm:text-7xl lg:mx-20 lg:text-7xl 2xl:mx-60">
           CONSECTETUR ELIT SED, DICTUM AT RINCIDUNT SIT AMET.
         </h1>
-        <div className="text-lg font-medium">
-          <h6>sed do eiusmod tempor incididunt ut labore.</h6>
+        <div className="text-lg mx-8 font-medium">
+          <h6>eiusmod tempor incididunt ut labore.</h6>
           <h6 className="mx-10">
             Ut enim ad minim veniam, quis nostrud exercitation.
           </h6>

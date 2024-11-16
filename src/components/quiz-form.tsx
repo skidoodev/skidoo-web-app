@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,21 +11,28 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, MinusIcon, PlusIcon, Users } from "lucide-react";
+import { CalendarIcon, Loader2, MinusIcon, PlusIcon, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { type DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
+import { api } from "@/trpc/react";
+import { Stepper } from "./sections/stepper";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { SignInButton, useAuth, useUser } from "@clerk/nextjs";
+import { sendTravelFormEmail } from "@/app/api/send/route";
 
 type GroupSizeType = "adults" | "children" | "pets" | "seniors";
 
 interface FormData {
   destination: string;
-  dateRange: DateRange | undefined;
+  dateRange: DateRange;
   groupSize: Record<GroupSizeType, number>;
   dreamTrip: string;
   travelerTypes: string[];
+  email: string;
 }
 
 interface FormErrors {
@@ -33,6 +40,7 @@ interface FormErrors {
   dateRange: string;
   groupSize: string;
   travelerTypes: string;
+  email: string;
 }
 
 const travelerTypes = [
@@ -52,22 +60,45 @@ const stepImages = [
   "/placeholder.svg?height=600&width=600",
   "/placeholder.svg?height=600&width=600",
   "/placeholder.svg?height=600&width=600",
+  "/placeholder.svg?height=600&width=600",
 ];
 
 export default function Component() {
-  const [step, setStep] = useState(1);
+  const { user } = useUser();
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        email: user.primaryEmailAddress?.emailAddress || "",
+      }));
+      setIsSignUp(true);
+    }
+  }, [user]);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    const stepParam = searchParams.get("step");
+    setStep(stepParam ? parseInt(stepParam, 10) : 0);
+  }, [searchParams]);
+
+  const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     destination: "",
-    dateRange: undefined,
+    dateRange: {} as DateRange,
     groupSize: { adults: 1, children: 0, pets: 0, seniors: 0 },
     dreamTrip: "",
     travelerTypes: [],
+    email: "",
   });
   const [errors, setErrors] = useState<FormErrors>({
     destination: "",
     dateRange: "",
     groupSize: "",
     travelerTypes: "",
+    email: "",
   });
 
   const handleInputChange = (
@@ -79,11 +110,13 @@ export default function Component() {
   };
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
-    setFormData((prev) => ({
-      ...prev,
-      dateRange: range,
-    }));
-    setErrors((prev) => ({ ...prev, dateRange: "" }));
+    if (range) {
+      setFormData((prev) => ({
+        ...prev,
+        dateRange: range,
+      }));
+      setErrors((prev) => ({ ...prev, dateRange: "" }));
+    }
   };
 
   const handleGroupSizeChange = (
@@ -119,13 +152,38 @@ export default function Component() {
       dateRange: "",
       groupSize: "",
       travelerTypes: "",
+      email: "",
     };
 
-    if (!formData.destination) {
-      newErrors.destination = "Please enter a destination";
+    if (!isSignedIn && step === 1) {
+      if (!formData.email) {
+        newErrors.email = "Please enter an email address";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        newErrors.email = "Please enter a valid email address";
+      }
     }
 
-    if (!formData.dateRange?.from || !formData.dateRange.to) {
+    if (step === 1) {
+      if (!formData.email) {
+        newErrors.email = "Please enter an email address";
+      }
+      if (!formData.destination) {
+        newErrors.destination = "Please enter a destination";
+      }
+    }
+
+    if (!formData.dateRange.from || !formData.dateRange.to) {
+      newErrors.dateRange = "Please select a date range";
+    }
+
+    if (formData.dateRange.from && formData.dateRange.to) {
+      if (formData.dateRange.from > formData.dateRange.to) {
+        newErrors.dateRange = "End date must be after start date";
+      }
+      if (formData.dateRange.from < new Date()) {
+        newErrors.dateRange = "Start date cannot be in the past";
+      }
+    } else {
       newErrors.dateRange = "Please select a date range";
     }
 
@@ -151,42 +209,75 @@ export default function Component() {
     }
   };
 
-  const handlePrev = () => setStep((prev) => Math.max(prev - 1, 1));
+  const handlePrev = () => setStep((prev) => Math.max(prev - 1, 0));
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      console.log(formData);
-      // Here you would typically send the form data to your backend
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isSignedIn, userId } = useAuth();
+  
+  const guestFormMutation = api.travel_form.createAsGuest.useMutation();
+  const authenticatedFormMutation = api.travel_form.create.useMutation();
+
+  const handleSubmit = async () => {
+    if (!validateForm()) {
+      console.log("Form validation failed");
+      return;
+    }
+  
+    setIsSubmitting(true);
+    try {
+      const submissionData = {
+        destination: formData.destination,
+        adults: formData.groupSize.adults,
+        children: formData.groupSize.children,
+        pets: formData.groupSize.pets,
+        seniors: formData.groupSize.seniors,
+        description: formData.dreamTrip,
+        startDate: formData.dateRange.from!,
+        endDate: formData.dateRange.to!,
+        travelerTypes: formData.travelerTypes,
+        email: formData.email,
+      };
+  
+      let result;
+      if (isSignedIn) {
+        result = await authenticatedFormMutation.mutateAsync(submissionData);
+      } else {
+        result = await guestFormMutation.mutateAsync(submissionData);
+      }
+  
+      if (result.success) {
+        await sendTravelFormEmail(submissionData);
+        router.push('/success');
+      }
+      
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const totalTravelers = Object.values(formData.groupSize).reduce(
     (sum, count) => sum + count,
-    0,
   );
 
   return (
     <div className="flex min-h-screen flex-col bg-background lg:flex-row">
       <div className="flex w-full items-center justify-center bg-muted p-6 lg:w-1/2 lg:rounded-r-3xl">
         <img
-          src={stepImages[step - 1]}
-          alt={`Step ${step} illustration`}
+          src={stepImages[step]}
+          alt={`Step ${step + 1} illustration`}
           className="max-h-[300px] max-w-full rounded-lg object-contain shadow-lg lg:max-h-full"
         />
       </div>
       <div className="flex w-full flex-col lg:w-1/2">
-        <div className="flex-grow overflow-y-auto p-6">
+        <div className="flex flex-grow items-center overflow-y-auto p-6">
           <div className="mx-auto max-w-2xl space-y-6">
-            <h1 className="mb-8 text-left text-3xl font-bold lg:text-4xl">
-              Create your travel persona
+            <h1 className="mb-6 text-left text-3xl font-bold lg:text-5xl">
+              CREATE YOUR TRAVEL PERSONA
             </h1>
-            <p className="mb-8 text-left text-sm text-muted-foreground lg:text-base">
-              Let&apos;s get personal! Tell me a bit about your travel style and
-              preferences so I can whip up some spot-on destination and
-              experience suggestions just for you.
-            </p>
             <p className="mt-4 text-left text-xs text-muted-foreground lg:text-sm">
-              {step} of 3 steps • Approximately 4 minutes
+              {step + 1} of 3 steps • Approximately 3 minutes
             </p>
             <AnimatePresence mode="wait">
               <motion.div
@@ -196,48 +287,86 @@ export default function Component() {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
+                {step === 0 && (
+                  <div className="space-y-4">
+                    <div className="text-2xl font-semibold">
+                      Welcome! How would you like to continue?
+                    </div>
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <AuthButtons onGuestClick={() => setStep(1)}/>
+                    </Suspense>
+                  </div>
+                )}
                 {step === 1 && (
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     <div>
-                      <Label htmlFor="destination">
-                        Where do you want to go? *
-                      </Label>
+                      <Label htmlFor="email">Email Address *</Label>
+                      {isSignUp ? (
+                        <div>
+                          <Input
+                            onClick={() => setIsSignUp(false)}
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            readOnly
+                            className="bg-gray-100"
+                          />
+                        </div>
+                      ) : (
+                        <Input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="Enter your email address"
+                        />
+                      )}
+                      {errors.email && (
+                        <p className="text-sm text-red-500">{errors.email}</p>
+                      )}
+                    </div>
+                    <div>
+                      <Label htmlFor="destination">Destination *</Label>
                       <Input
+                        type="text"
                         id="destination"
                         name="destination"
-                        placeholder="Search for a destination"
                         value={formData.destination}
                         onChange={handleInputChange}
+                        placeholder="Where would you like to go?"
                       />
                       {errors.destination && (
-                        <p className="mt-1 text-sm text-red-500">
+                        <p className="text-sm text-red-500">
                           {errors.destination}
                         </p>
                       )}
                     </div>
                     <div>
-                      <Label>Travel Dates *</Label>
+                      <Label>Date Range *</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
-                            variant="outline"
+                            variant={"outline"}
                             className={cn(
                               "w-full justify-start text-left font-normal",
-                              !formData.dateRange && "text-muted-foreground",
+                              !formData.dateRange.from &&
+                                "text-muted-foreground",
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {formData.dateRange?.from ? (
+                            {formData.dateRange.from ? (
                               formData.dateRange.to ? (
-                                <span>
-                                  {format(formData.dateRange.from, "LLL dd, y")}{" "}
-                                  - {format(formData.dateRange.to, "LLL dd, y")}
-                                </span>
+                                `${format(
+                                  formData.dateRange.from,
+                                  "LLL dd, yyy",
+                                )} - ${format(formData.dateRange.to, "LLL dd, yyy")}`
                               ) : (
-                                format(formData.dateRange.from, "LLL dd, y")
+                                format(formData.dateRange.from, "LLL dd, yyy")
                               )
                             ) : (
-                              <span>Pick a date range</span>
+                              <span>Pick a date</span>
                             )}
                           </Button>
                         </PopoverTrigger>
@@ -245,7 +374,6 @@ export default function Component() {
                           <Calendar
                             initialFocus
                             mode="range"
-                            defaultMonth={formData.dateRange?.from}
                             selected={formData.dateRange}
                             onSelect={handleDateRangeChange}
                             numberOfMonths={2}
@@ -253,7 +381,7 @@ export default function Component() {
                         </PopoverContent>
                       </Popover>
                       {errors.dateRange && (
-                        <p className="mt-1 text-sm text-red-500">
+                        <p className="text-sm text-red-500">
                           {errors.dateRange}
                         </p>
                       )}
@@ -324,7 +452,7 @@ export default function Component() {
                         placeholder="Tell us about your ideal vacation..."
                         value={formData.dreamTrip}
                         onChange={handleInputChange}
-                        className="h-32"
+                        className="h-20"
                       />
                     </div>
                   </div>
@@ -360,29 +488,71 @@ export default function Component() {
                 )}
               </motion.div>
             </AnimatePresence>
-          </div>
-        </div>
-        <div className="border-t p-4">
-          <div className="mx-auto flex max-w-2xl items-center justify-between">
-            {step > 1 ? (
-              <Button onClick={handlePrev} variant="outline">
-                Previous
+            <div className="flex justify-between">
+              {step > 0 && (
+                <Button
+                  variant={"outline"}
+                  onClick={handlePrev}
+                  className="text-sm text-[#1C423C] lg:text-base"
+                >
+                  Back
+                </Button>
+              )}
+
+              <div className="flex flex-grow justify-center">
+                <Stepper currentStep={step} />
+              </div>
+
+              {step >= 1 && step < 2 && (
+                <Button
+                  onClick={handleNext}
+                  className="text-sm text-white lg:text-base"
+                >
+                  Next
+                </Button>
+              )}
+
+              {step === 2 && (
+                <Button
+                onClick={handleSubmit}
+                className="text-sm text-white lg:text-base"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  'Submit'
+                )}
               </Button>
-            ) : (
-              <div></div>
-            )}
-            {step < 2 ? (
-              <Button onClick={handleNext} className="ml-auto">
-                Next
-              </Button>
-            ) : (
-              <Button onClick={handleSubmit} className="ml-auto">
-                Submit
-              </Button>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+export function AuthButtons({ onGuestClick }: { onGuestClick: () => void }) {
+  return (
+    <div className="flex flex-col space-y-4">
+      <SignInButton
+        mode="modal"
+        fallbackRedirectUrl="/quiz?step=1"
+        signUpFallbackRedirectUrl="/quiz?step=1"
+      >
+        <Button>Sign In</Button>
+      </SignInButton>
+      <Button
+        variant="outline"
+        onClick={onGuestClick}
+        className="text-[#1C423C]"
+      >
+        Guest User
+      </Button>
     </div>
   );
 }

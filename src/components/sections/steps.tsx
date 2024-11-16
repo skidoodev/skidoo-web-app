@@ -2,10 +2,10 @@ export const Steps = () => {
   return (
     <section className="mx-auto max-w-6xl py-20">
       <div className="my-20 flex flex-col items-center justify-center">
-        <h1 className="mx-auto text-5xl font-bold text-[#1C423C] lg:mx-20 2xl:mx-60">
+        <h1 className="text-5xl font-bold text-center text-[#1C423C] mx-8 lg:mx-20 2xl:mx-60">
           LOREM IPSUM DOLOR SIZT AMET
         </h1>
-        <p className="mx-auto my-4 text-center text-xl font-semibold text-[#1C423C] lg:mx-40 2xl:mx-60">
+        <p className="my-6 text-center text-xl font-semibold text-[#1C423C] mx-8 lg:mx-40 2xl:mx-60">
           Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum Etiam
           ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
         </p>
