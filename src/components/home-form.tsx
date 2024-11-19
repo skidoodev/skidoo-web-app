@@ -62,7 +62,7 @@ const Form: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 bg-black p-10 rounded-xl w-fit mx-auto">
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 bg-[#F8EFC4] p-10 rounded-xl w-fit mx-auto">
       <div className="w-full sm:w-1/4">
         <Input
           id="destination"
@@ -70,6 +70,7 @@ const Form: React.FC = () => {
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
           placeholder="Destination"
+          className=""
         />
       </div>
 
@@ -154,12 +155,12 @@ const Form: React.FC = () => {
 
       {/* Plan Button */}
       <div className="w-full sm:w-auto flex justify-center">
-        <button
+        <Button
           onClick={handlePlan}
-          className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 w-full sm:w-auto"
+          className="px-4 py-2 text-[#1C403B] bg-[#FDCE00] rounded-md hover:bg-[#1C403B] hover:text-[#FDCE00] w-full sm:w-auto"
         >
           Plan
-        </button>
+        </Button>
       </div>
     </div>
   );
