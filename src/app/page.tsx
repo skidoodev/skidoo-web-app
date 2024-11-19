@@ -5,6 +5,7 @@ import { Steps } from "@/components/sections/steps";
 import { Features } from "@/components/sections/features";
 import CTA from "@/components/sections/cta";
 import Cards from "@/components/sections/cards";
+import Form from "@/components/home-form";
 import Testimonails from "@/components/sections/testimonials";
 import FeaturedPosts from "@/components/featured-posts";
 import { client } from "@/sanity/lib/client";
@@ -21,6 +22,9 @@ export default async function Home() {
     <main>
       <Header />
       <Hero />
+      <div className="mt-[60px]">
+        <Form />
+      </div> 
       <div className="bg-background">
         <Steps />
         <Features />
