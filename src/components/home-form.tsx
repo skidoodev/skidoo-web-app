@@ -57,7 +57,7 @@ const Form: React.FC = () => {
     if (destination && dateRange.from && dateRange.to && totalTravelers > 0) {
       router.push(`/quiz?step=2`);
     } else {
-      alert("Please fill in all fields before proceeding.");
+      router.push(`/quiz?step=1`);
     }
   };
 
