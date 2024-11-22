@@ -1,15 +1,19 @@
 'use client';
-
 import { useState } from "react";
 import { type POSTS_QUERYResult } from "../../sanity.types";
 import Link from 'next/link';
 import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import { IoLocationOutline } from "react-icons/io5";
+import { LikeButton } from "./like-button";
+import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
-export function Posts({ posts }: { posts: POSTS_QUERYResult }) {
+export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
+  const router = useRouter();
+  const [posts, setPosts] = useState(initialPosts);
   const [searchTerm, setSearchTerm] = useState("");
-
+  
   const filteredPosts = posts.filter((post) => {
     const lowercasedSearchTerm = searchTerm.toLowerCase();
     const titleMatches = post.title?.toLowerCase().includes(lowercasedSearchTerm);
@@ -50,9 +54,12 @@ export function Posts({ posts }: { posts: POSTS_QUERYResult }) {
                   />
                 )}
               </div>
-              <h2 className="mt-2 text-lg font-semibold text-gray-900 text-left">
-                {post?.title}
-              </h2>
+              <div className="mt-2 flex justify-between items-start">
+                <h2 className="text-lg font-semibold text-gray-900 text-left">
+                  {post?.title}
+                </h2>
+                <LikeButton postId={post._id} initialLikes={post.likes || 0} />
+              </div>
               {post.categories && (
                 <p className="flex items-center text-base font-medium text-left text-gray-600">
                   <IoLocationOutline className="mr-1" />
@@ -65,6 +72,14 @@ export function Posts({ posts }: { posts: POSTS_QUERYResult }) {
             </Link>
           </div>
         ))}
+      </div>
+      <div className="flex justify-center items-center my-12">
+        <Button
+          onClick={() => router.push("/")}
+          className="mx-auto px-4 py-2 hover:scale-105 transition-all rounded-lg shadow-md"
+        >
+          &larr; Go Back
+        </Button>
       </div>
     </div>
   );

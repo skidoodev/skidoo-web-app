@@ -176,6 +176,22 @@ export type Author = {
   }>;
 };
 
+export type Comment = {
+  _id: string;
+  _type: "comment";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  post: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "post";
+  };
+  content: string;
+  createdAt: string;
+};
+
 export type Category = {
   _id: string;
   _type: "category";
@@ -299,11 +315,13 @@ export type AllSanitySchemaTypes =
   | SanityImageHotspot
   | SanityImageAsset
   | SanityAssetSourceData
-  | SanityImageMetadata;
+  | SanityImageMetadata
+  | Comment;
+
 export declare const internalGroqTypeReferenceTo: unique symbol;
+
 // Source: ./src/sanity/lib/queries.ts
 // Variable: POSTS_QUERY
-// Query: *[_type == "post" && defined(slug.current)][0...12]{  _id, title, slug}
 export type POSTS_QUERYResult = Array<{
   _id: string;
   title: string | null;
@@ -316,11 +334,13 @@ export type POSTS_QUERYResult = Array<{
   } | null;
   categories?: Array<string | null>;
   author?: { name: string } | null;
+  likes?: number;
 }>;
 
 // Variable: POST_QUERY
-// Query: *[_type == "post" && slug.current == $slug][0]{  title, body, mainImage}
 export type POST_QUERYResult = {
+  likes: number;
+  _id: string;
   title: string | null;
   body: Array<
     | {

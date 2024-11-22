@@ -1,9 +1,9 @@
 import { Posts } from "@/components/posts";
-import { sanityFetch } from "@/sanity/lib/client";
+import { clientSanityFetch } from "@/sanity/lib/client";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
 
 export default async function Page() {
-  const posts = await sanityFetch({
+  const posts = await clientSanityFetch({
     query: POSTS_QUERY,
   });
 
