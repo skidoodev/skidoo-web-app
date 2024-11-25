@@ -1,24 +1,26 @@
 import { defineQuery } from "next-sanity";
 import { groq } from "next-sanity";
 
-export const POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.current)][0...12]{
+export const POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.current) && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) [0...12]{
     _id, 
     title, 
     slug, 
     mainImage, 
     "categories": categories[]->title, 
     author->{name},
-    likes
+    likes,
+    publishedAt
 }`);
 
-export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
+export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug && defined(publishedAt) && publishedAt <= now()][0]{
     _id,
     title, 
     body, 
     mainImage, 
     "categories": categories[]->title, 
     author->{name},
-    likes
+    likes,
+    publishedAt
 }`);
 
 export const POST_COMMENTS_QUERY = groq`
@@ -35,4 +37,4 @@ export const POST_COMMENTS_QUERY = groq`
   }
 `;
 
-export const POST_SLUG_QUERY = defineQuery(`*[_type == "post" && _id == $postId][0].slug.current`);
+export const POST_SLUG_QUERY = defineQuery(`*[_type == "post" && _id == $postId && defined(publishedAt) && publishedAt <= now()][0].slug.current`);
