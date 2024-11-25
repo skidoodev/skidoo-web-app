@@ -1,38 +1,30 @@
-import Link from "next/link";
-import { BsArrowRight } from "react-icons/bs";
+import Image from "next/image";
+import { HoverBorderGradient } from "../ui/hover-border-gradient";
+
 
 export const Hero = () => {
   return (
     <div>
-      <div className="bg-backgroud-pop text-backgroud-pop-secondary flex flex-col items-center justify-center pt-24 text-center 2xl:pt-36">
-        <h3 className="mx-16 text-lg font-semibold">
-          LOREM IPSUM DOLOR SIT AMET.
-        </h3>
-        <h1 className="mx-8 my-10 text-5xl font-black sm:text-7xl lg:mx-20 lg:text-7xl 2xl:mx-60">
-          CONSECTETUR ELIT SED, DICTUM AT RINCIDUNT SIT AMET.
-        </h1>
-        <div className="text-lg mx-8 font-medium">
-          <h6>sed do eiusmod tempor incididunt ut labore.</h6>
-          <h6 className="mx-8">
-            Ut enim ad minim veniam, quis nostrud exercitation.
-          </h6>
-        </div>
+      <div className="w-full p-7 bg-gradient-to-r from-[#8711C1] to-[#2472FC]">
+        <div className="flex justify-between 2xl:px-[60px]">
+          <div className="flex flex-col justify-center pl-8">
+            <span className="text-5xl text-white font-bold ">THE SKIDOO</span>
+            <div className="py-4">
+              <HoverBorderGradient
+                containerClassName="rounded-full"
+                as="button"
+                className="bg-black text-white flex items-center space-x-2">
+                <span className="text-xl px-4">Explore Blogs</span>
+              </HoverBorderGradient>
+            </div>
+          </div>
 
-        <div>
-          <Link
-            href="/quiz"
-            className="group my-12 flex items-center justify-center gap-2 rounded-2xl border-2 border-[#1C423C] bg-[#FDCE00] px-6 py-3 text-2xl font-bold shadow-[5px_5px_0px_0px_#1C423C] transition-all hover:scale-110 lg:px-8 lg:py-4"
-          >
-            GET STARTED{" "}
-            <BsArrowRight className="transition group-hover:translate-x-1.5" />
-          </Link>
-        </div>
-
-        <div className="mb-20 lg:my-6 mx-20 rounded-3xl lg:rounded-full border-2 border-[#1C423C] bg-gray-50 px-6 py-3 lg:px-8 lg:py-4 text-xl lg:text-2xl font-semibold 2xl:px-12">
-          Maecenas ante tincidunt tempus. Donec vitae sapien libero
-          venenatis faucibus. Etiam sit eget eros.
+          <div className="">
+            <Image className="pt-[14px] 2xl:pt-[120px] 2xl:pb-[60px]" quality={100} width={660} height={540} src="/hero.png" alt={"heroimage"}/>
+          </div>
         </div>
       </div>
     </div>
   );
 };
+

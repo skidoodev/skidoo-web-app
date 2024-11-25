@@ -2,7 +2,7 @@ import { BsArrowRight } from "react-icons/bs"
 
 const Testimonails = () => {
   return (
-    <section className="bg-background my-20">
+    <section className="bg-gray-50 my-20">
       <div className="mx-auto max-w-screen-xl px-6 py-12 lg:px-8 lg:py-16">
         <h2 className="text-center text-4xl font-bold tracking-tight text-[#1C423C] sm:text-5xl">
           ELIT SED DICTUM AT RINCIDUNT SIT AMET.

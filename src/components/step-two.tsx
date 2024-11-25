@@ -29,7 +29,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ selectedTypes, setSelectedTypes }) =>
   return (
     <div className="relative w-full max-w-6xl mx-auto group">
       {/* Gradient Border Effect */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
 
       <Card className="flex flex-col items-center bg-white rounded-2xl shadow-2xl p-6 sm:p-12 border border-gray-100 relative">
         <h1 className="font-semibold text-2xl text-gray-800 mb-8">Who do you relate to?</h1>
@@ -50,8 +50,8 @@ const StepTwo: React.FC<StepTwoProps> = ({ selectedTypes, setSelectedTypes }) =>
               <div className={`
                 absolute -inset-0.5 rounded-xl transition-opacity duration-300
                 ${selectedTypes.includes(type.id)
-                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 opacity-100'
-                  : 'bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover/card:opacity-70'}
+                  ? 'bg-gradient-to-r from-[#2472FC] to-[#8711C1] opacity-100'
+                  : 'bg-gradient-to-r from-[#2472FC] to-[#8711C1] opacity-0 group-hover/card:opacity-70'}
               `}></div>
 
               <div className={`

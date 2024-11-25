@@ -1,12 +1,7 @@
-"use client";
-
-import Drawer from "@/components/drawer";
-import { buttonVariants } from "@/components/ui/button";
-import { siteConfig } from "@/lib/config";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { UserAuthButton } from "../user-auth-button";
+"use client"
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { cn, navLinks } from '@/lib/utils';
 
 export default function Header() {
   const [addBorder, setAddBorder] = useState(false);
@@ -30,60 +25,33 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "relative sticky top-0 z-50 bg-backgroud-pop py-2 backdrop-blur",
-        addBorder && "bg-backgroud/50",
-      )}
-    >
-      <div className="container flex items-center justify-between">
-        <div className="hidden lg:block">
-          <div className="flex gap-8">
-            <div className="cursor-pointer text-lg font-medium text-[#1C423C] transition hover:scale-105">
-              Process
-            </div>
-            <div className="mr-16 cursor-pointer text-lg font-medium text-[#1C423C] transition hover:scale-105">
-              Benefits
-            </div>
-          </div>
-        </div>
+        "sticky top-0 z-50 flex items-center justify-between bg-gray-50 px-[60px] py-3 2xl:py-4 backdrop-blur shadow-2xl",
+        addBorder && "bg-background/50"
+      )}>
 
-        <Link
-          href="/"
-          title="brand-logo"
-          className="relative mr-6 flex items-center space-x-2"
-        >
-          <span className="text-2xl font-bold text-[#1C423C]">
-            {siteConfig.name}
-          </span>
-        </Link>
-
-        <div className="hidden lg:block">
-          <div className="flex items-center ">
-            {/* <nav className="mr-10"> <Menu /></nav> */}
-
-            <div className="flex gap-2">
-              <UserAuthButton />
-              <Link
-                href="/quiz"
-                className={cn(
-                  buttonVariants({ variant: "default" }),
-                  "flex w-full gap-2 border shadow-[2px_2px_0px_0px_#1C423C] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#1C423C] sm:w-auto",
-                )}
-              >
-                Get Started
-              </Link>
-            </div>
-          </div>
+      <Link href='/'>
+        <div className="flex gap-2 items-center">
+          <img className="h-[60px] 2xl:h-[72px]" src="/logo.png" alt="Logo" />
+          <img className="h-[25px] 2xl:h-[30px]" src="/logo-text.png" alt="Logo Text" />
         </div>
-        <div className="mt-2 block cursor-pointer lg:hidden">
-          <Drawer />
-        </div>
-      </div>
-      <hr
-        className={cn(
-          "absolute bottom-0 w-full transition-opacity duration-300 ease-in-out",
-          addBorder ? "opacity-90" : "opacity-0",
-        )}
-      />
+      </Link>
+
+      <ul className="flex gap-[60px] items-center justify-between">
+        {navLinks.map((navLink, index) => (
+          <li key={index} className="text-[#404040] text-lg hover:scale-105 hover:text-gray-950 cursor-pointer transition">
+            <Link href={navLink.href}>
+              {navLink.name}
+            </Link>
+          </li>
+        ))}
+        <li>
+          <Link href="/sign-up">
+            <button className="bg-[#4F49E3] text-white rounded-sm px-[20px] py-[8px] hover:scale-105 hover:bg-[#5050E6] transition">
+              Sign Up
+            </button>
+          </Link>
+        </li>
+      </ul>
     </header>
   );
 }

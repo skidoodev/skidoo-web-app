@@ -262,7 +262,7 @@ export default function Component() {
   );
 
   return (
-    <div className="flex min-h-screen flex-col bg-background lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-gray-50 lg:flex-row">
       <div className="flex w-full items-center justify-center bg-muted p-6 lg:w-1/2 lg:rounded-r-3xl">
         <img
           src={stepImages[step]}

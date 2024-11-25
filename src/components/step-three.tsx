@@ -20,7 +20,7 @@ const StepThree: React.FC<StepThreeProps> = ({
   return (
     <div className="relative w-full max-w-6xl mx-auto group">
       {/* Gradient Border Effect */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
 
       <Card className="flex flex-col bg-white rounded-2xl shadow-2xl p-6 sm:p-12 border border-gray-100 relative w-full">
         <div className="flex flex-col gap-4 w-full">

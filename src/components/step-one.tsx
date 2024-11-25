@@ -114,12 +114,12 @@ const StepOne: React.FC<StepOneProps> = ({
   return (
     <div className="relative w-full max-w-6xl mx-auto">
       {/* Gradient Border Effect */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
       
       <div className="flex flex-col sm:flex-row gap-6 items-center bg-white rounded-2xl shadow-2xl justify-around p-6 sm:p-12 border border-gray-100 relative">
         {/* Location Input */}
         <div className="relative w-full sm:w-[35%] group">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg opacity-0 group-focus-within:opacity-60 transition-opacity duration-300" />
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-lg opacity-0 group-focus-within:opacity-60 transition-opacity duration-300" />
           <div className="relative bg-white rounded-lg">
             <input
               id="destination"

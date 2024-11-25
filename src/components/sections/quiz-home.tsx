@@ -130,7 +130,7 @@ const Form: React.FC = () => {
             transition-all duration-300 ease-in-out transform
             ${isNextDisabled()
               ? "bg-gray-400"
-              : "bg-blue-600 hover:scale-105 shadow-lg"
+              : "bg-[#5048E2] hover:scale-105 shadow-lg"
             }`}
         >
           {step === 2 ? "Submit" : "Next"}
