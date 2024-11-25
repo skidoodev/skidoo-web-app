@@ -9,6 +9,7 @@ import Testimonails from "@/components/sections/testimonials";
 import FeaturedPosts from "@/components/featured-posts";
 import { client } from "@/sanity/lib/client";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
+import Form from "@/components/sections/quiz-home";
 
 async function getPosts() {
   const posts = await client.fetch(POSTS_QUERY);
@@ -21,7 +22,8 @@ export default async function Home() {
     <main>
       <Header />
       <Hero />
-      <div className="bg-background">
+      <div className="bg-gray-50">
+        <Form />
         <Steps />
         <Features />
         <FeaturedPosts posts={posts} />
