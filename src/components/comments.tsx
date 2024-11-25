@@ -211,7 +211,7 @@ export function Comments({ postId }: { postId: string }) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-4 text-center">COMMENTS</h2>
+      <h2 className="text-3xl font-bold mb-4 text-center">COMMENTS - Under development, please do not try</h2>
       
       {!isSignedIn ? (
         <div className="text-center space-y-4">
