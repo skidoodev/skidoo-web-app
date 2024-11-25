@@ -11,10 +11,10 @@ export const Hero = () => {
             <span className="text-5xl text-white font-bold ">THE SKIDOO</span>
             <div className="py-4">
               <HoverBorderGradient
-                containerClassName="rounded-full"
+                containerClassName="rounded-full hover:scale-105 transition-all"
                 as="button"
                 className="bg-black text-white flex items-center space-x-2">
-                <span className="text-xl px-4">Explore Blogs</span>
+                <span className="text-xl font-semibold px-4">EXPLORE BLOGS</span>
               </HoverBorderGradient>
             </div>
           </div>
