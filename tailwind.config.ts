@@ -22,8 +22,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        "backgroud-pop": "hsl(var(--backgroud-pop))",
-        "backgroud-pop-secondary": "hsl(var(--backgroud-pop-secondary))",
+        "backgroud-pop": "var(--backgroud-pop)",
+        "backgroud-pop-secondary": "var(--backgroud-pop-secondary)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

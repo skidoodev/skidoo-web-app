@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --backgroud-pop: 50 79% 87%;
-    --backgroud-pop-secondary: 171 40% 18%;
+    --backgroud-pop: #8711c1;
+    --backgroud-pop-secondary: #2472fc;
     --background: 43.64 49.56% 96.95%;
     --foreground: 20 14.3% 4.1%;
     --muted: 170.53 3.96% 89.99%;

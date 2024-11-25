@@ -88,3 +88,23 @@ export function formatDate(date: string) {
     return `${fullDate} (${yearsAgo}y ago)`;
   }
 }
+
+type NavLink = {
+  name: string;
+  href: string;
+};
+
+export const navLinks: NavLink[] = [
+  {
+    name: 'Home',
+    href: '/',
+  },
+  {
+    name: 'About Us',
+    href: '/about',
+  },
+  {
+    name: 'Blogs',
+    href: '/blogs', 
+  },
+];
