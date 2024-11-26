@@ -31,7 +31,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ selectedTypes, setSelectedTypes }) =>
       {/* Gradient Border Effect */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-      <Card className="flex flex-col items-center bg-white rounded-2xl shadow-2xl p-6 sm:p-12 border border-gray-100 relative">
+      <Card className="flex flex-col items-center bg-white rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all p-6 sm:p-12 border border-gray-100 relative">
         <h1 className="font-semibold text-2xl text-gray-800 mb-8">Who do you relate to?</h1>
         
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 items-stretch justify-around w-full max-w-6xl">

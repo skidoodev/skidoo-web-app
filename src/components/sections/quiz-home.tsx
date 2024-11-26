@@ -121,7 +121,7 @@ const Form: React.FC = () => {
         className={`absolute left-1/2 transform -translate-x-1/2 translate-y-1/2 flex justify-center items-center w-full px-4
           transition-all duration-500 ease-in-out
           ${isAnimating ? 'opacity-0' : 'opacity-100'}
-          ${step === 0 ? 'bottom-[118px]' : step === 1 ? 'bottom-0' : 'bottom-9'}`}
+          ${step === 0 ? 'bottom-[108px]' : step === 1 ? 'bottom-0' : 'bottom-7'}`}
       >
         <button
           onClick={handleNext}
@@ -142,14 +142,14 @@ const Form: React.FC = () => {
         className={`absolute left-1/2 transform -translate-x-1/2 flex gap-2
           transition-all duration-500 ease-in-out
           ${isAnimating ? 'opacity-0' : 'opacity-100'}
-          ${step === 0 ? 'bottom-[74px]' : step === 1 ? '-bottom-10' : '-bottom-1'}`}
+          ${step === 0 ? 'bottom-[64px]' : step === 1 ? '-bottom-10' : '-bottom-3'}`}
       >
         {[0, 1, 2].map((index) => (
           <div
             key={index}
             className={`h-2 rounded-full transition-all duration-300
               ${step === index 
-                ? "bg-blue-500 w-6" 
+                ? "bg-[#5048E2] w-6" 
                 : "bg-gray-300 w-2"
               }`}
           ></div>

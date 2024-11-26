@@ -25,7 +25,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 flex items-center justify-between bg-gray-50 px-[60px] py-3 2xl:py-4 backdrop-blur shadow-2xl",
+        "sticky top-0 z-50 flex items-center justify-between bg-gray-50 px-[60px] 2xl:px-[80px] py-3 2xl:py-4 backdrop-blur shadow-2xl",
         addBorder && "bg-background/50"
       )}>
 
@@ -38,7 +38,7 @@ export default function Header() {
 
       <ul className="flex gap-[60px] items-center justify-between">
         {navLinks.map((navLink, index) => (
-          <li key={index} className="text-[#404040] text-lg hover:scale-105 hover:text-gray-950 cursor-pointer transition">
+          <li key={index} className="text-[#404040] text-lg font-medium hover:scale-105 hover:text-gray-950 cursor-pointer transition">
             <Link href={navLink.href}>
               {navLink.name}
             </Link>
@@ -46,7 +46,7 @@ export default function Header() {
         ))}
         <li>
           <Link href="/sign-up">
-            <button className="bg-[#4F49E3] text-white rounded-sm px-[20px] py-[8px] hover:scale-105 hover:bg-[#5050E6] transition">
+            <button className="bg-[#4F49E3] text-white font-medium rounded-sm px-[20px] py-[8px] hover:scale-105 hover:bg-[#5050E6] transition">
               Sign Up
             </button>
           </Link>
