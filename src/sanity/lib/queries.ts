@@ -8,8 +8,7 @@ export const POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.curren
     mainImage, 
     "categories": categories[]->title, 
     author->{name},
-    likes,
-    publishedAt
+    likes
 }`);
 
 export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug && defined(publishedAt) && publishedAt <= now()][0]{
@@ -19,8 +18,7 @@ export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slu
     mainImage, 
     "categories": categories[]->title, 
     author->{name},
-    likes,
-    publishedAt
+    likes
 }`);
 
 export const POST_COMMENTS_QUERY = groq`
