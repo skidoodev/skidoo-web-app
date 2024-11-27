@@ -11,27 +11,31 @@ const Cards = () => {
 
       <div className="flex flex-wrap justify-between mx-auto max-w-6xl px-6 gap-6">
         <div className="flex flex-col items-center">
-          <div className="bg-gray-50 text-black relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+          <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+           💰
           </div>
-          <p className="text-white mt-4 text-lg font-medium">Card 1</p>
+          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
         </div>
 
         <div className="flex flex-col items-center">
-          <div className="bg-gray-50 text-black relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+          <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+            💰
           </div>
-          <p className="text-white mt-4 text-lg font-medium">Card 2</p>
+          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
         </div>
 
         <div className="flex flex-col items-center">
-          <div className="bg-gray-50 text-black relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+          <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+           💰
           </div>
-          <p className="text-white mt-4 text-lg font-medium">Card 3</p>
+          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
         </div>
 
         <div className="flex flex-col items-center">
-          <div className="bg-gray-50 text-black relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+          <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+           💰
           </div>
-          <p className="text-white mt-4 text-lg font-medium">Card 4</p>
+          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
         </div>
       </div>
     </section>

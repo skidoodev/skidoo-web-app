@@ -1,9 +1,12 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import { DateRange as DayPickerDateRange } from "react-day-picker";
 import StepOne from "../step-one";
 import StepTwo from "../step-two";
 import StepThree from "../step-three";
+import { sendTravelFormEmail } from "@/app/api/send/route";
 
 interface DateRange {
   from: Date | undefined;
@@ -18,6 +21,7 @@ interface GroupSizeType {
 }
 
 const Form: React.FC = () => {
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [destination, setDestination] = useState("");
@@ -52,14 +56,33 @@ const Form: React.FC = () => {
     }, 300);
   };
 
-  const handleSubmit = () => {
-    console.log(`Destination: ${destination}`);
-    console.log(`Date Range:`, dateRange);
-    console.log(`Group Size:`, groupSize);
-    console.log(`Selected Types: ${selectedTypes}`);
-    console.log(`Description: ${description}`);
-    console.log(`Email: ${email}`);
-    alert("Form submitted!");
+  const handleSubmit = async () => {
+    try {
+      const formData = {
+        destination,
+        startDate: dateRange.from?.getTime() || 0,
+        endDate: dateRange.to?.getTime() || 0,
+        adults: groupSize.adults,
+        children: groupSize.children,
+        pets: groupSize.pets,
+        seniors: groupSize.seniors,
+        travelerTypes: selectedTypes,
+        description,
+        email
+      };
+    
+      // Send form data to backend and send email
+      await axios.post("/api/submit-travel-form", formData);
+      await sendTravelFormEmail(formData);
+    
+      router.push('/success');
+    } catch (error) {
+      console.error('Form submission error:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Detailed error:', error.response?.data);
+      }
+      alert('Failed to submit form. Please try again.');
+    }
   };
 
   const isNextDisabled = () => {

@@ -19,8 +19,9 @@ export const About = () => {
         <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-between lg:gap-20">
            
           <div className="relative group mt-8 lg:mt-0">
-            <div className="w-[450px] h-[600px] rounded-2xl bg-gradient-to-r from-[#8711C1] to-[#2472FC] p-1 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <div className="w-full h-full bg-black rounded-xl overflow-hidden relative">
+            <div className="w-[412px] h-[550px] rounded-2xl bg-gradient-to-r from-[#8711C1] to-[#2472FC] p-1 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="w-full h-full bg-gray-50 rounded-xl flex justify-center items-center overflow-hidden relative">
+                <Image className="" height={200} width={200} src={"/logo-main.png"} alt={"Logo"} quality={100} />
               </div>
             </div>
           </div>

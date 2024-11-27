@@ -126,7 +126,7 @@ export const TestimonialCard: React.FC = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="max-w-6xl border-4 border-white bg-gradient-to-r from-[#8711C1] to-[#2472FC] relative h-[21rem] shadow-2xl rounded-2xl mb-2">
+          className="max-w-6xl border-4 border-white bg-gradient-to-r from-[#8711C1] to-[#2472FC] relative h-[21rem] hover:shadow-2xl shadow-xl transition-all duration-300 rounded-2xl mb-2">
 
           <button onClick={handlePrevious}
             className="absolute z-20 top-1/2 -left-5 -translate-y-1/2 bg-white rounded-full shadow-lg hover:scale-105 transition-all">
