@@ -91,7 +91,7 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
       <div className="flex justify-center items-center mt-20 mb-12">
         <Button
           onClick={() => router.push("/")}
-          className="mx-auto bg-[#8711C1] hover:bg-[#8711C1] text-white px-4 py-2 hover:scale-105 transition-all rounded-lg shadow-md"
+          className="mx-auto font-medium bg-[#8711C1] hover:bg-[#8711C1] text-white px-4 py-2 hover:scale-105 transition-all rounded-lg shadow-md hover:shadow-xl"
         >
           &larr; Go Back
         </Button>
