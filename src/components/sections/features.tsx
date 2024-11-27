@@ -1,84 +1,48 @@
 import Image from "next/image";
+import { TestimonialCard } from "../testimonial-card";
 
-export const Features = () => {
+export const About = () => {
   return (
-    <section className="py-20">
-      <div className="my-20 flex flex-col items-center justify-center">
-        <h1 className="text-5xl text-center font-bold text-[#1C423C] mx-8 lg:mx-20 2xl:mx-60">
-          DE FINIBUS BONORUM ET MALORUM
-        </h1>
-        <p className="my-4 text-center text-xl font-semibold text-[#1C423C] mx-8 lg:mx-40 2xl:mx-60">
-          Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
-          impedit quo minus id quod maxime placeat facere possimus, omnis
-          voluptas assumenda est.
-        </p>
+    <section className="relative pt-20 pb-10">
+
+      <div className="absolute top-32 -right-12 bottom-0 w-1/2 z-[-1] pointer-events-none">
+        <Image 
+          src="/background2.png" 
+          alt="Background" 
+          height={1000}
+          width={700}
+          quality={95}
+        />
       </div>
 
-      <div className="flex justify-center flex-wrap mx-10 gap-8">
-        <div className="group">
-          <div className="relative cursor-pointer overflow-hidden rounded-3xl border-2 border-[#1C423C] bg-[#FBEEAF] text-[#1C423C] transition group-hover:scale-105 sm:h-[25rem] sm:w-[22rem] sm:pr-8">
-            <div className="flex h-full flex-col px-6 py-6">
-              <h3 className="text-xl font-semibold sm:text-2xl">
-                Finibus Bonorum et Malorum
-              </h3>
-              <p className="mt-2 overflow-hidden text-base leading-relaxed sm:text-lg">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium.
-              </p>
+      <div className="flex flex-col mx-auto max-w-6xl px-6 my-12">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-between lg:gap-20">
+           
+          <div className="relative group mt-8 lg:mt-0">
+            <div className="w-[412px] h-[550px] rounded-2xl bg-gradient-to-r from-[#8711C1] to-[#2472FC] p-1 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="w-full h-full bg-gray-50 rounded-xl flex justify-center items-center overflow-hidden relative">
+                <Image className="" height={200} width={200} src={"/logo-main.png"} alt={"Logo"} quality={100} />
+              </div>
             </div>
-            <Image
-              className="absolute -right-20 top-40 mt-12 hidden rounded-t-3xl shadow-2xl transition group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-110 sm:block"
-              src=""
-              alt="My Projects"
-              quality={95}
-              width={640}
-              height={360}
-            />
+          </div>
+
+          <div className="flex flex-col text-center lg:text-left max-w-lg space-y-4">
+            <h2 className="text-4xl pt-6 font-bold sm:text-5xl bg-gradient-to-r from-[#2472FC] to-[#8711C1] text-transparent bg-clip-text">
+              About Us
+            </h2>
+            <p className="text-lg text-black leading-relaxed pt-8">
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="group">
-          <div className="relative cursor-pointer overflow-hidden rounded-3xl border-2 border-[#1C423C] bg-[#FBEEAF] text-[#1C423C] transition group-hover:scale-105 sm:h-[25rem] sm:w-[22rem] sm:pr-8">
-            <div className="flex h-full flex-col px-6 py-6">
-              <h3 className="text-xl font-semibold sm:text-2xl">
-                Dicta sunt explicabo
-              </h3>
-              <p className="mt-2 overflow-hidden text-base leading-relaxed sm:text-lg">
-                eaque ipsa quae ab illo inventore veritatis et quasi architecto
-                beatae vitae dicta sunt explicabo.
-              </p>
-            </div>
-            <Image
-              className="absolute -right-20 top-40 mt-12 hidden rounded-t-3xl shadow-2xl transition group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-110 sm:block"
-              src=""
-              alt="My Projects"
-              quality={95}
-              width={640}
-              height={360}
-            />
-          </div>
-        </div>
-
-        <div className="group">
-          <div className="relative cursor-pointer overflow-hidden rounded-3xl border-2 border-[#1C423C] bg-[#FBEEAF] text-[#1C423C] transition group-hover:scale-105 sm:h-[25rem] sm:w-[22rem] sm:pr-8">
-            <div className="flex h-full flex-col px-6 py-6">
-              <h3 className="text-xl font-semibold sm:text-2xl">
-                Dignissimos ducimus
-              </h3>
-              <p className="mt-2 overflow-hidden text-base leading-relaxed sm:text-lg">
-                At vero eos et accusamus et iusto odio qui blanditiis deleniti
-                atque corrupti quos dolores et quas.
-              </p>
-            </div>
-            <Image
-              className="absolute -right-20 top-40 mt-12 hidden rounded-t-3xl shadow-2xl transition group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-110 sm:block"
-              src=""
-              alt="My Projects"
-              quality={95}
-              width={640}
-              height={360}
-            />
-          </div>
+      <div className="flex flex-col mx-auto max-w-6xl px-6 pt-6">
+        <h2 className="text-4xl my-20 font-bold sm:text-5xl bg-gradient-to-r from-[#2472FC] to-[#8711C1] text-transparent bg-clip-text">
+          Testimonials
+        </h2>
+        <div className="flex justify-center items-center mt-8">
+          <TestimonialCard />
         </div>
       </div>
     </section>
