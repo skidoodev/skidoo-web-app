@@ -18,7 +18,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { type DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
 import { api } from "@/trpc/react";
-import { Stepper } from "./sections/stepper";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { SignInButton, useAuth, useUser } from "@clerk/nextjs";
@@ -214,8 +213,8 @@ export default function Component() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { isSignedIn, userId } = useAuth();
   
-  const guestFormMutation = api.travel_form.createAsGuest.useMutation();
-  const authenticatedFormMutation = api.travel_form.create.useMutation();
+  // const guestFormMutation = api.travel_form.createAsGuest.useMutation();
+  // const authenticatedFormMutation = api.travel_form.create.useMutation();
 
   const handleSubmit = async () => {
     if (!validateForm()) {
@@ -239,16 +238,16 @@ export default function Component() {
       };
   
       let result;
-      if (isSignedIn) {
-        result = await authenticatedFormMutation.mutateAsync(submissionData);
-      } else {
-        result = await guestFormMutation.mutateAsync(submissionData);
-      }
+      // if (isSignedIn) {
+      //   result = await authenticatedFormMutation.mutateAsync(submissionData);
+      // } else {
+      //   result = await guestFormMutation.mutateAsync(submissionData);
+      // }
   
-      if (result.success) {
-        await sendTravelFormEmail(submissionData);
-        router.push('/success');
-      }
+      // if (result.success) {
+      //   await sendTravelFormEmail(submissionData);
+      //   router.push('/success');
+      // }
       
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -262,7 +261,7 @@ export default function Component() {
   );
 
   return (
-    <div className="flex min-h-screen flex-col bg-background lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-gray-50 lg:flex-row">
       <div className="flex w-full items-center justify-center bg-muted p-6 lg:w-1/2 lg:rounded-r-3xl">
         <img
           src={stepImages[step]}
@@ -498,10 +497,6 @@ export default function Component() {
                   Back
                 </Button>
               )}
-
-              <div className="flex flex-grow justify-center">
-                <Stepper currentStep={step} />
-              </div>
 
               {step >= 1 && step < 2 && (
                 <Button

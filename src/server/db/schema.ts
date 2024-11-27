@@ -1,8 +1,8 @@
+//src/server/db/schema.ts
 import { text, integer, int } from "drizzle-orm/sqlite-core";
 import { sqliteTableCreator } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
-import { relations } from "drizzle-orm";
 
 export const createTable = sqliteTableCreator(
   (name) => `skidoo-web-app_${name}`,
@@ -18,7 +18,7 @@ export const users = createTable("user", {
   firstName: text("first_name", { length: 256 }),
   lastName: text("last_name", { length: 256 }),
   imageUrl: text("image_url"),
-  // For OAuth providers like Google
+  
   externalAccounts: text("external_accounts", { mode: "json" }).$type<{
     provider: string;
     providerId: string;
@@ -34,16 +34,12 @@ export const users = createTable("user", {
 });
 
 // Define relations between users and travel forms
-export const usersRelations = relations(users, ({ many }) => ({
-  travelForms: many(travelForm),
-}));
+// export const usersRelations = relations(users, ({ many }) => ({
+//   travelForms: many(travelForm),
+// }));
 
 export const travelForm = createTable("travel_form", {
   id: text("id", { length: 256 }).primaryKey().notNull().$defaultFn(createId),
-  // Reference the user using clerkId for direct mapping with webhook data
-  userId: text("user_id", { length: 256 })
-    .references(() => users.id, { onDelete: "cascade" }),
-
   destination: text("destination").notNull(),
   startDate: int("startDate", { mode: "timestamp" }).notNull(),
   endDate: int("endDate", { mode: "timestamp" }).notNull(),
@@ -56,13 +52,17 @@ export const travelForm = createTable("travel_form", {
     .notNull()
     .$type<string[]>()
     .default(sql`'[]'`),
-  email: text("email", { length: 256 }),
+  email: text("email", { length: 256 }).notNull(),
 });
 
 // Define relations between travel forms and users
-export const travelFormRelations = relations(travelForm, ({ one }) => ({
-  user: one(users, {
-    fields: [travelForm.userId],
-    references: [users.id],
-  }),
-}));
+// export const travelFormRelations = relations(travelForm, ({ one }) => ({
+//   user: one(users, {
+//     fields: [travelForm.userId],
+//     references: [users.id],
+//   }),
+// }));
+
+  // Reference the user using clerkId for direct mapping with webhook data
+  // userId: text("user_id", { length: 256 })
+  //   .references(() => users.id, { onDelete: "cascade" }),
