@@ -46,7 +46,7 @@ export default function Header() {
         ))}
         <li>
           <Link href="/sign-up">
-            <button className="bg-[#4F49E3] text-white font-medium rounded-sm px-[20px] py-[8px] hover:scale-105 hover:bg-[#5050E6] transition">
+            <button className="bg-[#4F49E3] text-white font-medium rounded-sm px-[20px] py-[8px] hover:scale-105 hover:bg-[#5050E6] transition-all">
               Sign Up
             </button>
           </Link>

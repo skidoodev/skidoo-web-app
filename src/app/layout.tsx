@@ -31,7 +31,7 @@ export default function RootLayout({
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY} afterSignOutUrl="/">
       <html lang="en">
         <body
-          className={`mx-auto min-h-screen w-full scroll-smooth bg-gray-50 font-sans antialiased ${inter.variable}`}
+          className={`mx-auto min-h-screen w-full scroll-smooth bg-gray-50 font-sans overflow-x-hidden antialiased ${inter.variable}`}
         >
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </body>

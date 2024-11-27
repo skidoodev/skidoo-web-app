@@ -16,14 +16,14 @@ export const Explainer = () => {
 
           
           <div className="relative group mt-8 lg:mt-0">
-            <div className="w-[560px] h-[350px] rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 p-1 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div className="w-[560px] h-[350px] rounded-2xl bg-gradient-to-r from-[#8711C1] to-[#2472FC] p-1 shadow-xl hover:shadow-2xl transition-all duration-300">
               <div className="w-full h-full bg-black rounded-xl overflow-hidden relative">
                 
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 group-hover:bg-opacity-30 transition-all">
                   <button className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-105 transition-transform">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="w-8 h-8 text-purple-600"
+                      className="w-8 h-8 text-[#8711C1]"
                       viewBox="0 0 24 24"
                       fill="currentColor"
                     >
