@@ -37,7 +37,7 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
           />
         </div>
         <div className="relative z-10 flex flex-col sm:flex-row justify-between items-center px-4 sm:px-16 2xl:px-24">
-          <h1 className="text-4xl font-bold sm:text-5xl text-white">
+          <h1 className="text-4xl font-bold lg:text-5xl 2xl:text-6xl text-white">
             Blogs
           </h1>
           <input
