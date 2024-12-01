@@ -6,6 +6,7 @@ import { PortableText, PortableTextComponents } from "@portabletext/react";
 import { urlFor } from "@/sanity/lib/image";
 import { type POST_QUERYResult } from "../../sanity.types";
 import Link from "next/link";
+import { CircleDot } from "lucide-react";
 
 const portableTextComponents: PortableTextComponents = {
   types: {
@@ -69,8 +70,12 @@ function ItineraryContent({ value }: { value: any }) {
             key={index}
             className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-center bg-white">
             
-            <div className="text-left col-span-3">
-              <PortableText value={step} components={portableTextComponents} />
+            <div className="text-left col-span-3 flex items-start gap-3">
+            <span className="text-xl text-[#2472FC] mt-[21px]"><CircleDot className="h-5 w-5" strokeWidth={4} /></span>
+
+              <div>
+                <PortableText value={step} components={portableTextComponents} />
+              </div>
             </div>
 
             <div className="flex col-span-2 justify-end">
@@ -117,7 +122,7 @@ export function Post({ post }: { post: POST_QUERYResult }) {
   } = post;
 
   return (
-    <section className="min-h-screen bg-white relative">
+    <section className="min-h-screen bg-white relative bg-[url('/background.png')] bg-bottom bg-no-repeat bg-contain">
       <div className="relative py-[40px] 2xl:py-[60px] bg-gradient-to-r from-[#8711C1] to-[#2472FC] mb-20 overflow-hidden">
         <div className="absolute inset-0 opacity-40">
           <Image
@@ -175,10 +180,10 @@ export function Post({ post }: { post: POST_QUERYResult }) {
           {fullItinnerary && (
             <div className="col-span-12 lg:col-span-8 relative">
               <div className="absolute inset-0 bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl -m-1 z-0"></div>
-              <div className="relative z-10 bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8">
+              <div className="relative z-10 bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 pl-4 py-8 pr-8">
                 <div className="flex items-center justify-between mb-6 space-x-8">
                   <h2 
-                    className={`text-4xl font-bold cursor-pointer relative pb-2 transition-all duration-700
+                    className={`text-4xl font-bold cursor-pointer relative ml-4 pb-2 transition-all duration-700
                       ${activeTab === 'itinerary' 
                         ? 'bg-gradient-to-r from-[#2472FC] to-[#8711C1] bg-clip-text text-transparent' 
                         : 'text-gray-500'} 
@@ -223,7 +228,7 @@ export function Post({ post }: { post: POST_QUERYResult }) {
                       className={`
                         transition-all duration-700 ease-in-out 
                         ${activeTab === 'extras' 
-                          ? 'opacity-100 visible' 
+                          ? 'pl-6 opacity-100 visible' 
                           : 'opacity-0 invisible absolute'}`}
                     >
                       {activeTab === 'extras' && (
@@ -308,16 +313,6 @@ export function Post({ post }: { post: POST_QUERYResult }) {
               />
             </div>
           )}
-          
-          {/* Visible background image at the bottom */}
-          <div className="absolute bottom-0 left-0 w-full h-full z-0">
-            <Image
-              src="/background.png"
-              alt="Background"
-              fill
-              className="object-cover"
-            />
-          </div>
         </div>
       </main>
     </section>
