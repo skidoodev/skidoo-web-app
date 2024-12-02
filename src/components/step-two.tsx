@@ -8,16 +8,16 @@ interface StepTwoProps {
 
 const StepTwo: React.FC<StepTwoProps> = ({ selectedTypes, setSelectedTypes }) => {
   const travellerTypes = [
-    { id: "adventure", name: "The Adventure Seeker", icon: "🏔️" },
-    { id: "culture", name: "The Culture Enthusiast", icon: "🏛️" },
-    { id: "relaxation", name: "The Relaxation Seeker", icon: "🏖️" },
-    { id: "budget", name: "The Budget Traveler", icon: "💰" },
-    { id: "family", name: "The Family Traveler", icon: "👨‍👩‍👧‍👦" },
-    { id: "friends", name: "The Friends Day-Out", icon: "🍻" },
-    { id: "solo", name: "The Solo Traveler", icon: "🎒" },
-    { id: "romantic", name: "The Romantic Getaway", icon: "💑" },
-    { id: "corporate", name: "The Corporate Traveler", icon: "💼" },
-    { id: "senior", name: "The Senior Traveler", icon: "👴" },
+    { id: "adventure", name: "Adventure Seeker", icon: "🏔️" },
+    { id: "culture", name: "Culture Enthusiast", icon: "🏛️" },
+    { id: "relaxation", name: "Relaxation Seeker", icon: "🏖️" },
+    { id: "budget", name: "Budget Traveler", icon: "💰" },
+    { id: "family", name: "Family Traveler", icon: "👨‍👩‍👧‍👦" },
+    { id: "friends", name: "Friends Day-Out", icon: "🍻" },
+    { id: "solo", name: "Solo Traveler", icon: "🎒" },
+    { id: "romantic", name: "Romantic Getaway", icon: "💑" },
+    { id: "corporate", name: "Corporate Traveler", icon: "💼" },
+    { id: "senior", name: "Senior Traveler", icon: "👴" },
   ];
 
   const toggleType = (id: string) => {

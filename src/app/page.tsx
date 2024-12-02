@@ -1,7 +1,7 @@
 import Header from "@/components/sections/header";
 import { Hero } from "@/components/sections/hero";
-import { About } from "@/components/sections/features";
-import Cards from "@/components/sections/cards";
+import { About } from "@/components/sections/about";
+import Features from "@/components/sections/features";
 import { client } from "@/sanity/lib/client";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
 import Form from "@/components/sections/quiz-home";
@@ -22,7 +22,7 @@ export default async function Home() {
       <Form />   
       <FeaturedPosts posts={posts} />
       <Explainer />
-      <Cards />
+      <Features />
       <About />
     </main>
   );
