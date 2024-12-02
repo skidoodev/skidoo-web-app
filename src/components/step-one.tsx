@@ -138,6 +138,12 @@ const StepOne: React.FC<StepOneProps> = ({
               </IconContext.Provider>
               Location
             </label>
+            <style jsx>{`
+                input:-webkit-autofill {
+                  -webkit-text-fill-color: #3270d6 !important;
+                  transition: background-color 5000s ease-in-out 0s;
+                }
+              `}</style>
           </div>
         </div>
 
@@ -160,7 +166,7 @@ const StepOne: React.FC<StepOneProps> = ({
                     }
                     readOnly
                     placeholder="Pick a date"
-                    className="peer border px-4 pb-2 pt-10 w-full text-base border-gray-300 rounded-lg focus:outline-none text-[#3b82f6] hover:shadow-sm cursor-pointer"
+                    className="peer border px-4 pb-2 pt-10 w-full font-medium text-lg border-gray-300 rounded-lg focus:outline-none text-[#3b82f6] hover:shadow-sm cursor-pointer"
                   />
                   <label
                     className={`flex gap-1 justify-center items-center absolute top-3 left-4 transition-all duration-200 ${
@@ -198,7 +204,7 @@ const StepOne: React.FC<StepOneProps> = ({
                   type="text"
                   value={`${totalTravelers} Travellers`}
                   readOnly
-                  className="peer border px-4 pb-2 pt-10 w-full text-base border-gray-300 rounded-lg focus:outline-none text-[#3b82f6] hover:shadow-sm cursor-pointer"
+                  className="peer border px-4 pb-2 pt-10 w-full font-medium text-lg border-gray-300 rounded-lg focus:outline-none text-[#3b82f6] hover:shadow-sm cursor-pointer"
                 />
                 <label
                   className={`flex gap-1 justify-center items-center absolute top-3 left-4 transition-all duration-200 ${

@@ -1,8 +1,6 @@
-"use client"
-import React, { useState } from 'react';
-import Image from "next/image"
-import { CircleChevronLeft, CircleChevronRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 interface Testimonial {
   id: number;
@@ -16,232 +14,233 @@ interface Testimonial {
 const testimonialData: Testimonial[] = [
   {
     id: 1,
-    name: "Virat Kohli",
+    name: "Hrishikesh Mane",
     profession: "Cricketer",
-    quote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,",
-    rating: 4,
-    image: "/user1.jpeg"
+    quote: "TheSkidoo transformed my travel experience! They crafted a perfect itinerary that matched my love for food and adventure. Every recommendation was spot on! I discovered hidden gems I would have never found on my own. I cant wait to book my next trip with them!",
+    rating: 5,
+    image: "/user1.jpeg",
   },
   {
     id: 2,
-    name: "Rohit Sharma",
+    name: "Virat Kohli",
     profession: "Cricketer",
-    quote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,",
-    rating: 5,
-    image: "/user1.jpeg"
+    quote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
+    rating: 4,
+    image: "/user1.jpeg",
   },
   {
     id: 3,
     name: "Unknown",
     profession: "Unknown",
-    quote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,",
+    quote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
     rating: 3,
-    image: "/"
-  }
+    image: "/",
+  },
 ];
 
 export const TestimonialCard: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const componentRef = useRef<HTMLDivElement>(null);
 
-  const handleNext = () => {
-    setIsAnimating(true);
-    setCurrentIndex((prevIndex) => 
-      (prevIndex + 1) % testimonialData.length
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Use optional chaining and provide a fallback
+        const entry = entries[0];
+        if (entry) {
+          setIsVisible(entry.isIntersecting);
+        }
+      },
+      { threshold: 0.1 }
     );
-    setTimeout(() => setIsAnimating(false), 500);
-  };
+  
+    if (componentRef.current) {
+      observer.observe(componentRef.current);
+    }
+  
+    return () => {
+      if (componentRef.current) {
+        observer.unobserve(componentRef.current);
+      }
+    };
+  }, []);
 
-  const handlePrevious = () => {
-    setIsAnimating(true);
-    setCurrentIndex((prevIndex) => 
-      (prevIndex - 1 + testimonialData.length) % testimonialData.length
-    );
-    setTimeout(() => setIsAnimating(false), 500);
-  };
+  useEffect(() => {
+    if (!isVisible || isHovered) return;
+
+    timerRef.current = setTimeout(() => {
+      setIsAnimating(true);
+      
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => 
+          (prevIndex + 1) % testimonialData.length
+        );
+        setIsAnimating(false);
+      }, 500);
+    }, 5000);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [currentIndex, isHovered, isVisible]);
 
   const handleSliderClick = (index: number) => {
-    setIsAnimating(true);
+    if (index === currentIndex) return;
     setCurrentIndex(index);
-    setTimeout(() => setIsAnimating(false), 500);
   };
 
-  // Non-null assertion operator (!) to satisfy TypeScript
   const testimonial = testimonialData[currentIndex]!;
 
-  // Tween animation variants with easing
-  const imageVariants = {
-    initial: { scale: 0, opacity: 0 },
-    animate: { 
-      scale: 1, 
-      opacity: 1,
-      transition: { 
-        type: "tween", 
-        duration: 0.3,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const textVariants = {
-    initial: { 
-      opacity: 0, 
-      y: 20 
-    },
-    animate: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        type: "tween", 
-        duration: 0.3,
-        ease: "easeOut",
-        delay: 0.2
-      }
-    }
-  };
-
-  const nameVariants = {
-    initial: { 
-      opacity: 0, 
-      x: -20 
-    },
-    animate: { 
-      opacity: 1, 
-      x: 0,
-      transition: { 
-        type: "tween", 
-        duration: 0.3,
-        ease: "easeOut",
-        delay: 0.3
-      }
-    }
-  };
-
   return (
-    <section className="relative">
-      <AnimatePresence mode="wait">
-        <motion.div 
-          key={testimonial.id}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="max-w-6xl border-4 border-white bg-gradient-to-r from-[#8711C1] to-[#2472FC] relative h-[21rem] hover:shadow-2xl shadow-xl transition-all duration-300 rounded-2xl mb-2">
+    <section 
+      ref={componentRef}
+      className="relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div 
+        className={`
+          max-w-5xl border-4 border-white bg-gradient-to-r from-[#8711C1] to-[#2472FC] 
+          relative h-[21rem] hover:shadow-2xl shadow-xl transition-all duration-300 
+          rounded-2xl hover:scale-105 mb-4
+          ${isAnimating ? 'animate-slide-out' : 'animate-slide-in'}
+        `}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50 pointer-events-none z-10 rounded-2xl"></div>
 
-          <button onClick={handlePrevious}
-            className="absolute z-20 top-1/2 -left-5 -translate-y-1/2 bg-white rounded-full shadow-lg hover:scale-105 transition-all">
-            <CircleChevronLeft className='h-12 w-12 text-[#8711C1]' />
-          </button>
+        <div className="absolute z-10 -top-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="bg-white rounded-3xl p-[1px]">
+            <Image
+              quality={100}
+              height={150}
+              width={180}
+              src={testimonial.image}
+              alt={testimonial.name}
+              className="rounded-3xl border-2 shadow-xl border-white"
+            />
+          </div>
+        </div>
 
-          <button 
-            onClick={handleNext}
-            className="absolute z-20 top-1/2 -right-5 -translate-y-1/2 bg-white rounded-full shadow-lg hover:scale-105 transition-all">
-            <CircleChevronRight className='h-12 w-12 text-[#2472FC]' />
-          </button>
-
-          <div className="absolute z-10 -top-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <motion.div 
-              variants={imageVariants}
-              initial="initial"
-              animate="animate"
-              className="bg-white rounded-3xl p-[1px]">
-
-              <Image 
-                quality={100} 
-                height={150} 
-                width={180} 
-                src={testimonial.image} 
-                alt={testimonial.name} 
-                className="rounded-3xl border-2 shadow-xl border-white"/>
-            </motion.div>
+        <div className="relative h-full z-20">
+          <div className="flex justify-start pl-8 pt-8">
+            <Image
+              quality={100}
+              height={64}
+              width={80}
+              src={"/quote.png"}
+              alt={"quote"}
+            />
           </div>
 
-          <div className="relative h-full">
-            <div className="flex justify-start pl-8 pt-8">
-              <Image quality={100} height={64} width={80} src={"/quote.png"} alt={"quote"} />
-            </div>
+          <p className="text-xl text-white text-center pt-6 px-16 pb-2">
+            {testimonial.quote}
+          </p>
 
-            <motion.p 
-              key={`quote-${testimonial.id}`}
-              variants={textVariants}
-              initial="initial"
-              animate="animate"
-              className="text-xl text-white text-center pt-6 px-16 pb-2">
-              {testimonial.quote}
-            </motion.p>
-
-            <div className="px-16 pt-4">
-              <div className="flex justify-between items-center">
-                <div className="flex flex-col">
-                  <motion.div 
-                    variants={nameVariants}
-                    initial="initial"
-                    animate="animate"
-                    className="text-xl font-bold text-white">
-                    {testimonial.name}
-                  </motion.div>
-                  <motion.div 
-                    variants={nameVariants}
-                    initial="initial"
-                    animate="animate"
-                    transition={{ delay: 0.4 }}
-                    className="text-sm text-gray-300">
-                    {testimonial.profession}
-                  </motion.div>
-                </div>
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ 
-                    type: "tween", 
-                    duration: 0.3,
-                    ease: "easeOut",
-                    delay: 0.5 
-                  }}
-                  className="flex items-center gap-1">
-                  {[...Array(testimonial.rating)].map((_, index) => (
-                    <Image key={index} quality={100} height={20} width={22} src={"/star.png"} alt={"star"} />
-                  ))}
-                  {[...Array(5 - testimonial.rating)].map((_, index) => (
-                    <Image key={index} quality={100} height={20} width={22} src={"/unstar.png"} alt={"unstar"} />
-                  ))}
-                </motion.div>
+          <div className="px-16 pt-4 flex justify-between items-center absolute bottom-10 left-0 right-0">
+            <div className="flex flex-col">
+              <div className="text-xl font-bold text-white">
+                {testimonial.name}
+              </div>
+              <div className="text-sm text-gray-300">
+                {testimonial.profession}
               </div>
             </div>
-
-            <div className="absolute opacity-40 bottom-0 left-0 w-full">
-              <Image quality={100} layout="responsive" height={100} width={900} src={"/t-background.png"} alt={"background"} objectFit="cover"/>
+            <div className="flex items-center gap-1">
+              {[...Array(testimonial.rating)].map((_, index) => (
+                <Image
+                  key={index}
+                  quality={100}
+                  height={20}
+                  width={22}
+                  src={"/star.png"}
+                  alt={"star"}
+                />
+              ))}
+              {[...Array(5 - testimonial.rating)].map((_, index) => (
+                <Image
+                  key={index}
+                  quality={100}
+                  height={20}
+                  width={22}
+                  src={"/unstar.png"}
+                  alt={"unstar"}
+                />
+              ))}
             </div>
           </div>
-        </motion.div>
-      </AnimatePresence>
+
+          <div className="absolute opacity-40 bottom-0 left-0 w-full">
+            <Image quality={100} layout="responsive" height={100} width={900} src={"/t-background.png"} alt={"background"} objectFit="cover"/>
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes slideOut {
+          0% { transform: translateX(0); opacity: 1; }
+          100% { transform: translateX(-100%); opacity: 0; }
+        }
+        @keyframes slideIn {
+          0% { transform: translateX(100%); opacity: 0; }
+          100% { transform: translateX(0); opacity: 1; }
+        }
+        .animate-slide-out {
+          animation: slideOut 0.5s ease-in-out;
+        }
+        .animate-slide-in {
+          animation: slideIn 0.5s ease-in-out;
+        }
+      `}</style>
 
       <div className="flex justify-between items-center pt-2 px-4">
         <div className="flex items-center gap-3">
-          <Image quality={100} height={40} width={45} src={"/foot1.png"} alt={"Plane"} />
-          <Image quality={100} height={2} width={435} src={"/foot2.png"} alt={"Dotted line"} />
+          <Image
+            quality={100}
+            height={40}
+            width={45}
+            src={"/foot1.png"}
+            alt={"Plane"}
+          />
+          <Image
+            quality={100}
+            height={2}
+            width={400}
+            src={"/foot2.png"}
+            alt={"Dotted line"}
+          />
         </div>
-        <div
-          className={`absolute left-1/2 transform -translate-x-1/2 flex gap-2
-            transition-all duration-500 ease-in-out
-            ${isAnimating ? 'opacity-0' : 'opacity-100'}
-            ${currentIndex === 0 ? 'bottom-[22px]' : currentIndex === 1 ? 'bottom-[22px]' : 'bottom-[22px]'}`}>
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex gap-2 bottom-[22px]">
           {testimonialData.map((_, index) => (
             <div
               key={index}
               onClick={() => handleSliderClick(index)}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer
-                ${currentIndex === index 
-                  ? "bg-[#5048E2] w-6" 
-                  : "bg-gray-300 w-2"
-                }`}/>
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                currentIndex === index ? "bg-[#5048E2] w-6" : "bg-gray-300 w-2"
+              }`}
+            />
           ))}
         </div>
         <div className="flex items-center gap-3">
-          <Image quality={100} height={2} width={460} src={"/foot3.png"} alt={"Dotted line"} />
-          <Image quality={100} height={36} width={20} src={"/foot4.png"} alt={"Location"} />
+          <Image
+            quality={100}
+            height={2}
+            width={425}
+            src={"/foot3.png"}
+            alt={"Dotted line"}
+          />
+          <Image
+            quality={100}
+            height={36}
+            width={20}
+            src={"/foot4.png"}
+            alt={"Location"}
+          />
         </div>
       </div>
     </section>
-  )
+  );
 };

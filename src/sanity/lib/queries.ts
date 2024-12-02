@@ -11,14 +11,20 @@ export const POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.curren
   likes
 }`);
 
-export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0]{
+export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0] {
   _id,
-  title, 
-  body, 
+  title,
+  body,
+  fullItinnerary,
+  summarizedTrip,
+  packingChecklist,
+  budgetBreakdown,
+  inANutshell,
+  otherActivities,
+  faqs,
   mainImage, 
   "categories": categories[]->title, 
   author->{name},
-  likes
 }`);
 
 export const POST_COMMENTS_QUERY = groq`

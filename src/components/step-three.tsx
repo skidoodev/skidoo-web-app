@@ -37,8 +37,8 @@ const StepThree: React.FC<StepThreeProps> = ({
               />
               <label
                 htmlFor="description"
-                className="flex gap-1 text-lg text-gray-700 items-center absolute top-3 left-4 
-                transition-all duration-200 peer-focus:text-muted-foreground peer-focus:text-base peer-focus:top-3"
+                className="flex gap-1 text-lg bg-inherit text-gray-700 items-center absolute pt-[13px] lg:pr-[710px] 2xl:pr-[720px] top-[1px] left-4
+                transition-all duration-200 peer-focus:text-muted-foreground peer-focus:text-base peer-focus:top-[2px] peer-focus:pt-[12px]"
               >
                 <NotebookPen className="text-[#3b82f6] h-[18px] w-[18px]"/>
                 Describe your dream trip{" "}
@@ -68,6 +68,12 @@ const StepThree: React.FC<StepThreeProps> = ({
                 </IconContext.Provider>
                 Email Address
               </label>
+              <style jsx>{`
+                input:-webkit-autofill {
+                  -webkit-text-fill-color: #3270d6 !important;
+                  transition: background-color 5000s ease-in-out 0s;
+                }
+              `}</style>
             </div>
           </div>
 

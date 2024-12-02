@@ -1,50 +1,58 @@
-import Image from "next/image";
-import { TestimonialCard } from "../testimonial-card";
+import React from 'react';
+import Image from 'next/image';
 
-export const About = () => {
+const Features = () => {
   return (
-    <section className="relative pt-20 pb-10">
+    <section className="pt-20 pb-32 bg-gradient-to-r from-[#8711C1] to-[#2472FC] relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-60 pointer-events-none"></div>
 
-      <div className="absolute top-32 -right-12 bottom-0 w-1/2 z-[-1] pointer-events-none">
-        <Image 
-          src="/background2.png" 
-          alt="Background" 
-          height={1000}
-          width={700}
-          quality={95}
+      <div className="flex flex-col mx-auto max-w-6xl p-6 relative z-10">
+        <h1 className="text-4xl font-bold sm:text-5xl text-white bg-clip-text pb-8">
+          Features
+        </h1>
+      </div>
+
+      <div className="flex flex-wrap justify-between mx-auto max-w-6xl px-6 gap-6 relative z-10">
+        <div className="flex flex-col items-center">
+          <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+            💰
+          </div>
+          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
+        </div>
+
+        <div className="flex flex-col items-center">
+          <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+            💰
+          </div>
+          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
+        </div>
+
+        <div className="flex flex-col items-center">
+          <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+            💰
+          </div>
+          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
+        </div>
+
+        <div className="flex flex-col items-center">
+          <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
+            💰
+          </div>
+          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
+        </div>
+      </div>
+      <div className="absolute opacity-5 bottom-0 left-0 w-full h-full pointer-events-none">
+        <Image
+          quality={100}
+          fill
+          src="/bg-features.png"
+          alt="background"
+          objectFit="cover"
+          style={{ objectPosition: 'bottom' }}
         />
-      </div>
-
-      <div className="flex flex-col mx-auto max-w-6xl px-6 my-12">
-        <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-between lg:gap-20">
-           
-          <div className="relative group mt-8 lg:mt-0">
-            <div className="w-[412px] h-[550px] rounded-2xl bg-gradient-to-r from-[#8711C1] to-[#2472FC] p-1 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <div className="w-full h-full bg-gray-50 rounded-xl flex justify-center items-center overflow-hidden relative">
-                <Image className="" height={200} width={200} src={"/logo-main.png"} alt={"Logo"} quality={100} />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col text-center lg:text-left max-w-lg space-y-4">
-            <h2 className="text-4xl pt-6 font-bold sm:text-5xl bg-gradient-to-r from-[#2472FC] to-[#8711C1] text-transparent bg-clip-text">
-              About Us
-            </h2>
-            <p className="text-lg text-black leading-relaxed pt-8">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col mx-auto max-w-6xl px-6 pt-6">
-        <h2 className="text-4xl my-20 font-bold sm:text-5xl bg-gradient-to-r from-[#2472FC] to-[#8711C1] text-transparent bg-clip-text">
-          Testimonials
-        </h2>
-        <div className="flex justify-center items-center mt-8">
-          <TestimonialCard />
-        </div>
       </div>
     </section>
   );
 };
+
+export default Features;

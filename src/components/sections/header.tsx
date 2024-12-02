@@ -1,10 +1,12 @@
 "use client"
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { cn, navLinks } from '@/lib/utils';
 
 export default function Header() {
   const [addBorder, setAddBorder] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,7 +40,13 @@ export default function Header() {
 
       <ul className="flex gap-[60px] items-center justify-between">
         {navLinks.map((navLink, index) => (
-          <li key={index} className="text-[#404040] text-lg font-medium hover:scale-105 hover:text-gray-950 cursor-pointer transition">
+          <li 
+            key={index} 
+            className={cn(
+              "text-[#404040] text-lg font-medium hover:scale-105 hover:text-gray-950 cursor-pointer transition",
+              pathname === navLink.href && "text-[#5544DF] font-semibold"
+            )}
+          >
             <Link href={navLink.href}>
               {navLink.name}
             </Link>

@@ -139,7 +139,6 @@ const Form: React.FC = () => {
         </div>
       </div>
 
-      {/* Next Button with animations */}
       <div
         className={`absolute left-1/2 transform -translate-x-1/2 translate-y-1/2 flex justify-center items-center w-full px-4
           transition-all duration-500 ease-in-out
@@ -149,7 +148,7 @@ const Form: React.FC = () => {
         <button
           onClick={handleNext}
           disabled={isNextDisabled()}
-          className={`px-6 py-2 text-white rounded-full w-[120px]
+          className={`px-12 py-2 text-white font-semibold text-lg rounded-full
             transition-all duration-300 ease-in-out transform
             ${isNextDisabled()
               ? "bg-gray-400"
@@ -160,7 +159,6 @@ const Form: React.FC = () => {
         </button>
       </div>
 
-      {/* Step Indicators with animations */}
       <div
         className={`absolute left-1/2 transform -translate-x-1/2 flex gap-2
           transition-all duration-500 ease-in-out

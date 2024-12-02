@@ -12,7 +12,7 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
   const router = useRouter();
   const [posts, setPosts] = useState(initialPosts);
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   const filteredPosts = posts.filter((post) => {
     const lowercasedSearchTerm = searchTerm.toLowerCase();
     const titleMatches = post.title?.toLowerCase().includes(lowercasedSearchTerm);
@@ -25,7 +25,7 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
   });
 
   return (
-    <section className=""> 
+    <section className="relative pb-12 bg-[url('/background.png')] bg-bottom bg-no-repeat bg-contain">
       <div className="relative py-[100px] bg-gradient-to-r from-[#8711C1] to-[#2472FC] mb-20 overflow-hidden">
         <div className="absolute inset-0 opacity-40">
           <Image
@@ -37,7 +37,7 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
           />
         </div>
         <div className="relative z-10 flex flex-col sm:flex-row justify-between items-center px-4 sm:px-16 2xl:px-24">
-          <h1 className="text-4xl font-bold sm:text-5xl text-white">
+          <h1 className="text-4xl font-bold lg:text-5xl 2xl:text-6xl text-white">
             Blogs
           </h1>
           <input
@@ -50,14 +50,18 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
         </div>
       </div>
 
-      <div className="sm:px-16 2xl:px-24 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-12">
-      {filteredPosts.map((post) => (
-        <Link key={post._id} href={`/posts/${post?.slug?.current}`} className="relative w-full max-w-[340px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all justify-self-center">
-        
-          <div
-            className="relative bg-white rounded-lg overflow-hidden border-[1px] border-transparent transition-all"
+      {/* Post Cards */}
+      <div className="sm:px-16 2xl:px-24 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-12 relative z-20">
+        {filteredPosts.map((post) => (
+          <Link 
+            key={post._id} 
+            href={`/posts/${post?.slug?.current}`} 
+            className="relative w-full max-w-[350px] max-h-[480px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all justify-self-center flex"
           >
-              <div className="block group bg-gray-50 rounded-lg p-3">
+            <div
+              className="flex flex-col bg-white rounded-lg overflow-hidden border-[1px] border-transparent transition-all w-full"
+            >
+              <div className="block group bg-white rounded-lg p-3 flex-grow">
                 <div className="relative aspect-square rounded-xl overflow-hidden">
                   {post?.mainImage?.asset?._ref && (
                     <Image
@@ -69,26 +73,28 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
                   )}
                 </div>
 
-                <div className="p-4">
-                  <h2 className="text-xl font-semibold text-gray-900">{post?.title}</h2>
-                  <p className="mt-1 text-sm text-gray-600 line-clamp-2">
+                <div className="p-4 flex flex-col">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">{post?.title}</h2>
+                  <p className="text-sm text-gray-600 line-clamp-2 mb-1">
                     {post.categories ? post.categories.join(", ") : "Uncategorized"}
                   </p>
-                  <p className="mt-1 text-sm text-gray-400">
+                  <p className="text-sm text-gray-400 mt-auto">
                     By {post.author?.name || "Unknown Author"}
                   </p>
                 </div>
               </div>
-
-              <div className="absolute bottom-4 right-4">
-                <LikeButton postId={post._id} initialLikes={post.likes || 0} />
+              <div>
+                <div className="absolute bottom-4 right-4">
+                  <LikeButton postId={post._id} initialLikes={post.likes || 0} />
+                </div>
               </div>
             </div>
           </Link>
         ))}
       </div>
 
-      <div className="flex justify-center items-center mt-20 mb-12">
+      {/* Button */}
+      <div className="flex justify-center items-center mt-20 relative z-20">
         <Button
           onClick={() => router.push("/")}
           className="mx-auto font-medium bg-[#8711C1] hover:bg-[#8711C1] text-white px-4 py-2 hover:scale-105 transition-all rounded-lg shadow-md hover:shadow-xl"
