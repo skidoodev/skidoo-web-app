@@ -10,7 +10,7 @@ const FeaturedPosts = ({ posts }: { posts: POSTS_QUERYResult }) => {
     .slice(0, 3);
 
   return (
-    <div className="bg-gray-50 pb-20">
+    <div className="bg-gray-50 pb-20 mb-12">
       <div className="container mx-auto max-w-6xl px-6">
         <div className="flex justify-start items-center py-12 lg:pb-16 lg:pt-20">
           <h2 className="text-4xl font-bold sm:text-5xl bg-gradient-to-r from-[#2472FC] to-[#8711C1] text-transparent bg-clip-text">

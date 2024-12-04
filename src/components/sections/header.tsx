@@ -24,6 +24,13 @@ export default function Header() {
     };
   }, []);
 
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header
       className={cn(
@@ -47,9 +54,15 @@ export default function Header() {
               pathname === navLink.href && "text-[#5544DF] font-semibold"
             )}
           >
-            <Link href={navLink.href}>
-              {navLink.name}
-            </Link>
+            {navLink.href === '/about' ? (
+              <span onClick={() => scrollToSection('about')}>
+                {navLink.name}
+              </span>
+            ) : (
+              <Link href={navLink.href}>
+                {navLink.name}
+              </Link>
+            )}
           </li>
         ))}
         <li>
