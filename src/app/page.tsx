@@ -5,7 +5,7 @@ import Features from "@/components/sections/features";
 import { client } from "@/sanity/lib/client";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
 import Form from "@/components/sections/quiz-home";
-import { Explainer } from "@/components/sections/explainer";
+// import { Explainer } from "@/components/sections/explainer";
 import FeaturedPosts from "@/components/sections/top-plans";
 
 async function getPosts() {
@@ -21,7 +21,7 @@ export default async function Home() {
       <Hero />
       <Form />   
       <FeaturedPosts posts={posts} />
-      <Explainer />
+      {/* <Explainer /> */}
       <Features />
       <About />
     </main>

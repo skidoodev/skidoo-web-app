@@ -17,28 +17,28 @@ const Features = () => {
           <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
             💰
           </div>
-          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
+          <p className="text-white mt-4 text-lg font-medium">AI-Powered</p>
         </div>
 
         <div className="flex flex-col items-center">
           <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
             💰
           </div>
-          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
+          <p className="text-white mt-4 text-lg font-medium">Personalized</p>
         </div>
 
         <div className="flex flex-col items-center">
           <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
             💰
           </div>
-          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
+          <p className="text-white mt-4 text-lg font-medium">Informative</p>
         </div>
 
         <div className="flex flex-col items-center">
           <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
             💰
           </div>
-          <p className="text-white mt-4 text-lg font-medium">Budget Friendly</p>
+          <p className="text-white mt-4 text-lg font-medium">Dynamic</p>
         </div>
       </div>
       <div className="absolute opacity-5 bottom-0 left-0 w-full h-full pointer-events-none">

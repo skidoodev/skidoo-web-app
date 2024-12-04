@@ -102,7 +102,10 @@ const Form: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full my-24">
+    <div className="relative w-full mt-40 mb-20">
+      <h2 className="text-4xl flex justify-center font-bold sm:text-5xl bg-gradient-to-r from-[#2472FC] to-[#8711C1] text-transparent bg-clip-text mb-8">
+        Tailor Your Travel Experience
+      </h2>
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{
@@ -148,7 +151,7 @@ const Form: React.FC = () => {
         <button
           onClick={handleNext}
           disabled={isNextDisabled()}
-          className={`px-12 py-2 text-white font-semibold text-lg rounded-full
+          className={`px-16 py-2 text-white font-semibold text-lg rounded-full
             transition-all duration-300 ease-in-out transform
             ${isNextDisabled()
               ? "bg-gray-400"

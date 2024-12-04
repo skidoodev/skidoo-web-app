@@ -3,7 +3,7 @@ import { TestimonialCard } from "../testimonial-card";
 
 export const About = () => {
   return (
-    <section className="relative pt-20 pb-10">
+    <section id="about" className="relative pt-20 pb-10">
 
       <div className="absolute top-32 -right-12 bottom-0 w-1/2 z-[-1] pointer-events-none">
         <Image 
@@ -17,7 +17,7 @@ export const About = () => {
       </div>
 
       <div className="flex flex-col mx-auto max-w-6xl px-6 my-12">
-        <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-between lg:gap-20">
+        <div className="flex flex-col lg:flex-row items-center lg:items-center lg:justify-between lg:gap-20">
            
           <div className="relative group mt-8 lg:mt-0">
             <div className="w-[375px] h-[500px] rounded-2xl bg-gradient-to-r from-[#8711C1] to-[#2472FC] p-1 shadow-xl hover:shadow-2xl transition-all duration-300">
@@ -36,6 +36,9 @@ export const About = () => {
             </p>
             <p className="text-lg text-black leading-relaxed">
               Our team of dedicated travel enthusiasts works hand-in-hand with you to craft trips that resonate with your personality, budget, and vision. With TheSkidoo, every trip is an opportunity to create memories that will last a lifetime.
+            </p>
+            <p className="text-lg text-black leading-relaxed">
+              We specialize in creating customized travel itineraries that match your passions, whether it&apos;s discovering hidden gems, indulging in local cuisines, chasing adventures, or simply relaxing.
             </p>
             <p className="text-lg text-black leading-relaxed">
               Let&apos;s start your journey today — because the world is waiting!
