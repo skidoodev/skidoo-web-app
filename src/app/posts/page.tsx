@@ -6,6 +6,6 @@ export default async function Page() {
   const posts = await clientSanityFetch({
     query: POSTS_QUERY,
   });
-
+  console.log(posts)
   return <Posts posts={posts} />;
 }

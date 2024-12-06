@@ -1,7 +1,7 @@
 import { defineQuery } from "next-sanity";
 import { groq } from "next-sanity";
 
-export const POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.current)][0...12] {
+export const POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.current)][] {
   _id, 
   title, 
   slug, 
