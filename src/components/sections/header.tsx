@@ -25,9 +25,13 @@ export default function Header() {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+    if (pathname !== '/') {
+      window.location.href = `/#${sectionId}`;
+    } else {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 

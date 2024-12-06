@@ -1,5 +1,5 @@
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type POSTS_QUERYResult } from "../../sanity.types";
 import Link from 'next/link';
 import Image from 'next/image';
@@ -23,6 +23,11 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
 
     return titleMatches || authorMatches || categoriesMatch;
   });
+
+  useEffect(() => {
+    console.log("post", posts.length)
+    console.log("filteredPost", filteredPosts.length)
+  })
 
   return (
     <section className="relative pb-12 bg-[url('/background.png')] bg-bottom bg-no-repeat bg-contain">
