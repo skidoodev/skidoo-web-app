@@ -2,23 +2,33 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 
-export default function SuccessPage() {
+export default function SuccessDialog() {
+  const [isOpen, setIsOpen] = React.useState(true);
   const router = useRouter();
 
+  const handleClose = () => {
+    setIsOpen(false);
+    router.push('/');
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-backgroud-pop p-4">
-      <Card className="max-w-2xl">
-        <CardContent className="flex flex-col items-center space-y-6 p-8">
-          <div className="rounded-full bg-green-100 p-4 m-2">
-            <CheckCircle className="h-12 w-12 text-green-600"/>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="bg-white backdrop-blur-sm text-black max-w-md rounded-lg">
+        <div className="flex flex-col items-center space-y-4 p-6">
+          <div className="rounded-full bg-[#2472FC]/15 p-4 m-2">
+            <CheckCircle className="h-12 w-12 text-[#2472FC]"/>
           </div>
           
-          <h1 className="text-center text-3xl font-bold">Thank You for Creating Your Travel Persona!</h1>
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl font-bold text-black">
+              Thank You for Creating Your Travel Persona!
+            </DialogTitle>
+          </DialogHeader>
           
-          <div className="space-y-4 text-center text-muted-foreground">
+          <div className="space-y-4 text-center text-gray-700">
             <p>
               We've received your travel preferences and will craft personalized recommendations just for you.
             </p>
@@ -27,16 +37,14 @@ export default function SuccessPage() {
             </p>
           </div>
 
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-            <Button 
-              onClick={() => router.push('/')}
-              className="min-w-[200px] m-2"
-            >
-              Return Home
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          <Button 
+            onClick={handleClose}
+            className="min-w-[200px] bg-[#2472FC] text-white font-medium rounded-sm hover:scale-105 hover:bg-[#8711C1] transition-all m-2"
+          >
+            Return Home
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

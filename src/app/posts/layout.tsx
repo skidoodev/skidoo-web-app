@@ -1,3 +1,4 @@
+import Header from "@/components/sections/header";
 import { VisualEditing } from "next-sanity";
 import { draftMode } from "next/headers";
 
@@ -9,6 +10,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+      <Header />
         {draftMode().isEnabled && (
           <a
             className="fixed bottom-0 right-0 m-4 bg-blue-500 p-4 text-white"

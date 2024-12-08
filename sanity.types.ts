@@ -135,6 +135,191 @@ export type Post = {
         _key: string;
       }
   >;
+  fullItinnerary?: {
+    itineraryStep1?: BlockContent;
+    itineraryStep2?: BlockContent;
+    itineraryStep3?: BlockContent;
+    itineraryStep4?: BlockContent;
+    itineraryStep5?: BlockContent;
+    itineraryStep6?: BlockContent;
+    itineraryStep7?: BlockContent;
+    itineraryStep8?: BlockContent;
+    itineraryStep9?: BlockContent;
+    itineraryStep10?: BlockContent;
+    itineraryStep11?: BlockContent;
+    itineraryStep12?: BlockContent;
+  } | null;
+  summarizedTrip?: Array<
+    | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+  >;
+  packingChecklist?: Array<
+    | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+  >;
+  budgetBreakdown?: Array<{
+    description?: string;
+    value?: string;
+    _type: 'object';
+    _key: string;
+  }>;
+  inANutshell?: Array<
+    | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+  >;
+  otherActivities?: Array<
+    | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+  >;
+  faqs?: Array<
+    | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+  >;
 };
 
 export type Author = {
@@ -174,6 +359,22 @@ export type Author = {
     _type: "block";
     _key: string;
   }>;
+};
+
+export type Comment = {
+  _id: string;
+  _type: "comment";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  post: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "post";
+  };
+  content: string;
+  createdAt: string;
 };
 
 export type Category = {
@@ -299,11 +500,13 @@ export type AllSanitySchemaTypes =
   | SanityImageHotspot
   | SanityImageAsset
   | SanityAssetSourceData
-  | SanityImageMetadata;
+  | SanityImageMetadata
+  | Comment;
+
 export declare const internalGroqTypeReferenceTo: unique symbol;
+
 // Source: ./src/sanity/lib/queries.ts
 // Variable: POSTS_QUERY
-// Query: *[_type == "post" && defined(slug.current)][0...12]{  _id, title, slug}
 export type POSTS_QUERYResult = Array<{
   _id: string;
   title: string | null;
@@ -316,11 +519,13 @@ export type POSTS_QUERYResult = Array<{
   } | null;
   categories?: Array<string | null>;
   author?: { name: string } | null;
+  likes?: number;
 }>;
 
 // Variable: POST_QUERY
-// Query: *[_type == "post" && slug.current == $slug][0]{  title, body, mainImage}
 export type POST_QUERYResult = {
+  // likes: number;
+  _id: string;
   title: string | null;
   body: Array<
     | {
@@ -369,6 +574,576 @@ export type POST_QUERYResult = {
   } | null;
   categories?: Array<string | null>;
   author?: { name: string } | null;
+  fullItinnerary?: {
+    itineraryStep1?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep2?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep3?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep4?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep5?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep6?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep7?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep8?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep9?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep10?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep11?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    itineraryStep12?: Array <
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    // Repeat for other itinerary steps...
+  } | null;
+  summarizedTrip?: Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+> | null;
+  packingChecklist?: Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+> | null;
+  budgetBreakdown?: Array<{
+    description?: string;
+    value?: string;
+    _type: 'object';
+    _key: string;
+  }> | null;
+  inANutshell?: Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+> | null;
+  otherActivities?: Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+> | null;
+  faqs?: Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }
+> | null;
 } | null;
 
 // Query TypeMap

@@ -12,6 +12,14 @@ const config = {
         protocol: "https",
         hostname: "cdn.sanity.io",
       },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.clerk.dev",
+      },
     ],
   },
   experimental: {

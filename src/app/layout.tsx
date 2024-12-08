@@ -1,8 +1,7 @@
 import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
 
-import { Inter } from "next/font/google";
-import { Poppins } from "next/font/google";
+import { Inter, Open_Sans } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { constructMetadata } from "@/lib/utils";
@@ -13,11 +12,10 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-const poppins = Poppins({
-  weight: ["500", "600", "900"],
+const open_sans = Open_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-open"
 });
 
 export const metadata: Metadata = constructMetadata({});
@@ -39,7 +37,7 @@ export default function RootLayout({
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY} afterSignOutUrl="/">
       <html lang="en">
         <body
-          className={`mx-auto min-h-screen w-full scroll-smooth bg-background font-sans antialiased ${poppins.variable}`}
+          className={`mx-auto transition-all min-h-screen w-full scroll-smooth bg-gray-50 font-sans overflow-x-hidden antialiased ${open_sans.variable} ${inter.variable}`}
         >
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </body>

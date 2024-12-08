@@ -50,6 +50,132 @@ export const postType = defineType({
       name: 'body',
       type: 'blockContent',
     }),
+    defineField({
+      name: 'fullItinnerary',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'itineraryStep1',
+          type: 'blockContent',
+          title: 'Itinerary Step 1',
+        }),
+        defineField({
+          name: 'itineraryStep2',
+          type: 'blockContent',
+          title: 'Itinerary Step 2',
+        }),
+        defineField({
+          name: 'itineraryStep3',
+          type: 'blockContent',
+          title: 'Itinerary Step 3',
+        }),
+        defineField({
+          name: 'itineraryStep4',
+          type: 'blockContent',
+          title: 'Itinerary Step 4',
+        }),
+        defineField({
+          name: 'itineraryStep5',
+          type: 'blockContent',
+          title: 'Itinerary Step 5',
+        }),
+        defineField({
+          name: 'itineraryStep6',
+          type: 'blockContent',
+          title: 'Itinerary Step 6',
+        }),
+        defineField({
+          name: 'itineraryStep7',
+          type: 'blockContent',
+          title: 'Itinerary Step 7',
+        }),
+        defineField({
+          name: 'itineraryStep8',
+          type: 'blockContent',
+          title: 'Itinerary Step 8',
+        }),
+        defineField({
+          name: 'itineraryStep9',
+          type: 'blockContent',
+          title: 'Itinerary Step 9',
+        }),
+        defineField({
+          name: 'itineraryStep10',
+          type: 'blockContent',
+          title: 'Itinerary Step 10',
+        }),
+        defineField({
+          name: 'itineraryStep11',
+          type: 'blockContent',
+          title: 'Itinerary Step 11',
+        }),
+        defineField({
+          name: 'itineraryStep12',
+          type: 'blockContent',
+          title: 'Itinerary Step 12',
+        }),
+      ],
+    }),
+    defineField({
+      name: 'summarizedTrip',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'packingChecklist',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'budgetBreakdown',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'description',
+              title: 'Description',
+              type: 'string',
+            }),
+            defineField({
+              name: 'value',
+              title: 'Value',
+              type: 'string',
+            }),
+          ],
+          preview: {
+            select: {
+              title: 'description',
+              subtitle: 'value',
+            },
+          },
+        },
+      ],
+    }),
+    defineField({
+      name: 'inANutshell',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'otherActivities',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'faqs',
+      type: 'blockContent',
+    }),
+    // defineField({
+    //   name: 'likes',
+    //   title: 'Likes',
+    //   type: 'number',
+    //   initialValue: 0,
+    // }),
+    defineField({
+      name: 'likeHistory',
+      title: 'Like History',
+      type: 'array',
+      of: [{ type: 'string' }],
+      initialValue: [],
+    }),
   ],
   preview: {
     select: {

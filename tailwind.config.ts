@@ -14,7 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", "Poppins", ...fontFamily.sans],
+        "sans": ["var(--font-sans)", "Poppins", ...fontFamily.sans],
+        "open": ["var(--font-open)", "Open Sans", ...fontFamily.sans] 
       },
       borderRadius: {
         lg: "var(--radius)",

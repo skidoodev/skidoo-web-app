@@ -100,11 +100,11 @@ export const navLinks: NavLink[] = [
     href: '/',
   },
   {
-    name: 'About Us',
-    href: '/about',
+    name: 'Explore',
+    href: '/posts', 
   },
   {
-    name: 'Blogs',
-    href: '/blogs', 
+    name: 'About',
+    href: '/about',
   },
 ];
