@@ -18,7 +18,7 @@ const testimonialData: Testimonial[] = [
     profession: "Cricketer",
     quote: "TheSkidoo transformed my travel experience! They crafted a perfect itinerary that matched my love for food and adventure. Every recommendation was spot on! I discovered hidden gems I would have never found on my own. I cant wait to book my next trip with them!",
     rating: 5,
-    image: "/user1.jpeg",
+    image: "/hrishi.jpeg",
   }
 ];
 
