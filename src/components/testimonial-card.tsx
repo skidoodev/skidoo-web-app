@@ -19,23 +19,7 @@ const testimonialData: Testimonial[] = [
     quote: "TheSkidoo transformed my travel experience! They crafted a perfect itinerary that matched my love for food and adventure. Every recommendation was spot on! I discovered hidden gems I would have never found on my own. I cant wait to book my next trip with them!",
     rating: 5,
     image: "/user1.jpeg",
-  },
-  {
-    id: 2,
-    name: "Virat Kohli",
-    profession: "Cricketer",
-    quote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
-    rating: 4,
-    image: "/user1.jpeg",
-  },
-  {
-    id: 3,
-    name: "Unknown",
-    profession: "Unknown",
-    quote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.",
-    rating: 3,
-    image: "/",
-  },
+  }
 ];
 
 export const TestimonialCard: React.FC = () => {
@@ -49,7 +33,6 @@ export const TestimonialCard: React.FC = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        // Use optional chaining and provide a fallback
         const entry = entries[0];
         if (entry) {
           setIsVisible(entry.isIntersecting);
@@ -70,7 +53,8 @@ export const TestimonialCard: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!isVisible || isHovered) return;
+    // Only enable auto-scroll if there are multiple testimonials
+    if (testimonialData.length <= 1 || !isVisible || isHovered) return;
 
     timerRef.current = setTimeout(() => {
       setIsAnimating(true);
@@ -99,8 +83,8 @@ export const TestimonialCard: React.FC = () => {
     <section 
       ref={componentRef}
       className="relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={testimonialData.length > 1 ? () => setIsHovered(true) : undefined}
+      onMouseLeave={testimonialData.length > 1 ? () => setIsHovered(false) : undefined}
     >
       <div 
         className={`
@@ -213,17 +197,19 @@ export const TestimonialCard: React.FC = () => {
             alt={"Dotted line"}
           />
         </div>
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex gap-2 bottom-[22px]">
-          {testimonialData.map((_, index) => (
-            <div
-              key={index}
-              onClick={() => handleSliderClick(index)}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                currentIndex === index ? "bg-[#5048E2] w-6" : "bg-gray-300 w-2"
-              }`}
-            />
-          ))}
-        </div>
+        {testimonialData.length > 1 && (
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex gap-2 bottom-[22px]">
+            {testimonialData.map((_, index) => (
+              <div
+                key={index}
+                onClick={() => handleSliderClick(index)}
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                  currentIndex === index ? "bg-[#5048E2] w-6" : "bg-gray-300 w-2"
+                }`}
+              />
+            ))}
+          </div>
+        )}
         <div className="flex items-center gap-3">
           <Image
             quality={100}

@@ -15,28 +15,28 @@ const Features = () => {
       <div className="flex flex-wrap justify-between mx-auto max-w-6xl px-6 gap-6 relative z-10">
         <div className="flex flex-col items-center">
           <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
-            💰
+            🤖
           </div>
           <p className="text-white mt-4 text-lg font-medium">AI-Powered</p>
         </div>
 
         <div className="flex flex-col items-center">
           <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
-            💰
+            📝
           </div>
           <p className="text-white mt-4 text-lg font-medium">Personalized</p>
         </div>
 
         <div className="flex flex-col items-center">
           <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
-            💰
+            📑
           </div>
           <p className="text-white mt-4 text-lg font-medium">Informative</p>
         </div>
 
         <div className="flex flex-col items-center">
           <div className="bg-gray-50 text-black text-7xl flex justify-center items-center relative h-[200px] w-[200px] rounded-2xl shadow-inner shadow-gray-500">
-            💰
+            🗓️
           </div>
           <p className="text-white mt-4 text-lg font-medium">Dynamic</p>
         </div>
