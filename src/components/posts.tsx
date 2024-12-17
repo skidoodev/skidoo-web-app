@@ -24,11 +24,6 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
     return titleMatches || authorMatches || categoriesMatch;
   });
 
-  useEffect(() => {
-    console.log("post", posts.length)
-    console.log("filteredPost", filteredPosts.length)
-  })
-
   return (
     <section className="relative pb-12 bg-[url('/background.png')] bg-bottom bg-no-repeat bg-contain">
       <div className="relative py-[100px] bg-gradient-to-r from-[#8711C1] to-[#2472FC] mb-20 overflow-hidden">
