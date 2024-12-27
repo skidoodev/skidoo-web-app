@@ -15,7 +15,7 @@ const testimonialData: Testimonial[] = [
   {
     id: 1,
     name: "Hrishikesh Mane",
-    profession: "Cricketer",
+    profession: "SDE (AWS)",
     quote: "TheSkidoo transformed my travel experience! They crafted a perfect itinerary that matched my love for food and adventure. Every recommendation was spot on! I discovered hidden gems I would have never found on my own. I cant wait to book my next trip with them!",
     rating: 5,
     image: "/hrishi.jpeg",
