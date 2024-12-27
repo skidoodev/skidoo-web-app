@@ -7,7 +7,7 @@ export const Hero = () => {
     <div className="relative w-full p-7 bg-gradient-to-r h-[85vh] from-[#8711C1] to-[#2472FC]">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-60 pointer-events-none z-0" />
 
-      <div className="relative flex flex-col md:flex-row justify-between items-center 2xl:px-[40px] pt-4 z-10">
+      <div className="relative flex justify-between items-center 2xl:px-[40px] pt-4 z-50">
         <div className="flex flex-col justify-center pl-[20px] 2xl:pl-4 max-w-2xl 2xl:max-w-3xl mb-6 md:mb-0 gap-4">
           <div className="text-4xl md:text-6xl 2xl:text-7xl text-white font-extrabold leading-tight">
             Your Unique Journey
@@ -27,7 +27,7 @@ export const Hero = () => {
           </div>
         </div>
 
-        <div className="relative w-full h-[400px] lg:w-[650px] lg:h-[525px] 2xl:w-[700px] 2xl:h-[670px] flex-shrink-0">
+        <div className="relative w-full lg:-right-2 h-[400px] lg:w-[600px] lg:h-[500px] 2xl:w-[700px] 2xl:h-[670px] flex-shrink-0">
           <Image
             className="object-contain"
             quality={100}
