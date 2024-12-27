@@ -519,7 +519,7 @@ export type POSTS_QUERYResult = Array<{
   } | null;
   categories?: Array<string | null>;
   author?: { name: string } | null;
-  likes?: number;
+  likes: number;
 }>;
 
 // Variable: POST_QUERY

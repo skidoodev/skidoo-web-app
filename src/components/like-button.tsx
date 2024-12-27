@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from "react";
-import { Heart, HeartIcon } from "lucide-react";
+import { HeartIcon } from "lucide-react";
 
 interface LikeButtonProps {
   postId: string;
@@ -13,24 +13,29 @@ export function LikeButton({ postId, initialLikes }: LikeButtonProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [userId] = useState(() => {
     if (typeof window === 'undefined') return '';
-    
     const stored = localStorage.getItem('userId');
     if (stored) return stored;
-    
     const newId = `user_${Math.random().toString(36).substr(2, 9)}`;
     localStorage.setItem('userId', newId);
     return newId;
   });
 
+  // Fetch current likes and user's like status
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    const stored = localStorage.getItem('likedPosts');
-    if (stored) {
-      const likedPosts = JSON.parse(stored);
-      setIsLiked(!!likedPosts[postId]);
-    }
-  }, [postId]);
+    const fetchLikeStatus = async () => {
+      try {
+        const response = await fetch(`/api/likes?postId=${postId}&userId=${userId}`);
+        if (!response.ok) throw new Error('Failed to fetch likes');
+        const data = await response.json();
+        setLikes(data.likes);
+        setIsLiked(data.hasLiked);
+      } catch (error) {
+        console.error('Error fetching likes:', error);
+      }
+    };
+
+    fetchLikeStatus();
+  }, [postId, userId]);
 
   const handleLike = async (event: React.MouseEvent) => {
     event.preventDefault();
@@ -49,21 +54,10 @@ export function LikeButton({ postId, initialLikes }: LikeButtonProps) {
       });
 
       if (!response.ok) throw new Error('Failed to update likes');
-      
       const result = await response.json();
 
-      // Update likes count
       setLikes(result.likes);
-
-      // Update liked state
       setIsLiked(result.hasLiked);
-      
-      // Update localStorage
-      const stored = localStorage.getItem('likedPosts');
-      const likedPosts = stored ? JSON.parse(stored) : {};
-      likedPosts[postId] = result.hasLiked;
-      localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
-
     } catch (error) {
       console.error('Error toggling like:', error);
     } finally {

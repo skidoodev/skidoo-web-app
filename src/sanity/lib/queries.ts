@@ -8,7 +8,7 @@ export const POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.curren
   mainImage, 
   "categories": categories[]->title, 
   author->{name},
-  likes
+  "likes": count(*[_type == "like" && post._ref == ^._id])
 }`);
 
 export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0] {
@@ -25,6 +25,7 @@ export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slu
   mainImage, 
   "categories": categories[]->title, 
   author->{name},
+  "likes": count(*[_type == "like" && post._ref == ^._id])
 }`);
 
 export const POST_COMMENTS_QUERY = groq`

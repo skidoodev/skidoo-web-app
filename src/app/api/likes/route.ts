@@ -1,59 +1,73 @@
-import { createClient } from '@sanity/client'
-import { NextResponse } from 'next/server'
+import { createClient } from '@sanity/client';
+import { NextResponse } from 'next/server';
 
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
   token: process.env.SANITY_API_TOKEN,
-  apiVersion: '2024-11-19',
+  apiVersion: '2024-01-01',
   useCdn: false,
-})
+});
 
-export async function PATCH(request: Request) {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const postId = searchParams.get('postId');
+  const userId = searchParams.get('userId');
+
+  if (!postId || !userId) {
+    return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
+  }
+
   try {
-    const { postId, action, userId } = await request.json()
-    
-    // First get the current post data
-    const post = await client.getDocument(postId)
-    
-    // Get current likes and likeHistory
-    const currentLikes = post?.likes || 0
-    const likeHistory: string[] = post?.likeHistory || [] // Explicitly define likeHistory as a string array
-    
-    // Check if user has already liked
-    const hasLiked = likeHistory.includes(userId)
-    
-    // If trying to like but already liked, or trying to unlike but hasn't liked, return current state
-    if ((action === 'like' && hasLiked) || (action === 'unlike' && !hasLiked)) {
-      return NextResponse.json({ 
-        likes: currentLikes,
-        hasLiked,
-        message: 'No change needed'
-      })
-    }
-    
-    // Update likes count and history
-    const newLikes = action === 'like' ? currentLikes + 1 : Math.max(0, currentLikes - 1)
-    const newLikeHistory = action === 'like' 
-      ? [...likeHistory, userId]
-      : likeHistory.filter((id: string) => id !== userId) // Explicitly type the `id` as a string
-    
-    // Update the document
-    const result = await client
-      .patch(postId)
-      .set({ 
-        likes: newLikes,
-        likeHistory: newLikeHistory
-      })
-      .commit()
+    const post = await client.fetch(`
+      *[_type == "post" && _id == $postId][0]{
+        "likes": count(*[_type == "like" && post._ref == ^._id]),
+        "hasLiked": defined(*[_type == "like" && post._ref == ^._id && userId == $userId][0])
+      }
+    `, { postId, userId });
 
     return NextResponse.json({
-      likes: newLikes,
-      hasLiked: action === 'like',
-      message: 'Successfully updated'
-    })
+      likes: post.likes,
+      hasLiked: post.hasLiked
+    });
   } catch (error) {
-    console.error('Error updating likes:', error)
-    return NextResponse.json({ error: 'Error updating likes' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch likes' }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: Request) {
+  const { postId, action, userId } = await request.json();
+
+  if (!postId || !action || !userId) {
+    return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
+  }
+
+  try {
+    if (action === 'like') {
+      await client.create({
+        _type: 'like',
+        post: { _type: 'reference', _ref: postId },
+        userId
+      });
+    } else {
+      await client.delete({
+        query: '*[_type == "like" && post._ref == $postId && userId == $userId]',
+        params: { postId, userId }
+      });
+    }
+
+    const updatedPost = await client.fetch(`
+      *[_type == "post" && _id == $postId][0]{
+        "likes": count(*[_type == "like" && post._ref == ^._id]),
+        "hasLiked": defined(*[_type == "like" && post._ref == ^._id && userId == $userId][0])
+      }
+    `, { postId, userId });
+
+    return NextResponse.json({
+      likes: updatedPost.likes,
+      hasLiked: updatedPost.hasLiked
+    });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to update likes' }, { status: 500 });
   }
 }
