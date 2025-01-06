@@ -19,20 +19,22 @@ export default function Header() {
         setAddBorder(false);
       }
 
-      const aboutSection = document.getElementById('about');
-      if (aboutSection) {
-        const aboutPosition = aboutSection.offsetTop - 100;
-        if (window.scrollY >= aboutPosition) {
-          setActiveSection('about');
-        } else {
-          setActiveSection('home');
+      if (pathname === '/') {
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+          const aboutPosition = aboutSection.offsetTop - 100;
+          if (window.scrollY >= aboutPosition) {
+            setActiveSection('about');
+          } else {
+            setActiveSection('home');
+          }
         }
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
   const handleNavigation = (navLink: { name: string; href: string }) => {
     if (navLink.name === 'Home') {
@@ -57,6 +59,16 @@ export default function Header() {
     window.location.href = navLink.href;
   };
 
+  const isActiveLink = (navLink: { name: string; href: string }) => {
+    if (pathname === '/') {
+      if (navLink.name === 'Home') return activeSection === 'home';
+      if (navLink.name === 'About') return activeSection === 'about';
+    } else {
+      return navLink.href !== '/' && pathname === navLink.href;
+    }
+    return false;
+  };
+
   return (
     <header
       className={cn(
@@ -77,10 +89,7 @@ export default function Header() {
             key={index} 
             className={cn(
               "text-[#404040] text-lg font-medium hover:scale-105 hover:text-gray-950 cursor-pointer transition",
-              ((navLink.name === 'Home' && activeSection === 'home') || 
-               (navLink.name === 'About' && activeSection === 'about') || 
-               (navLink.href !== '/' && pathname === navLink.href)) && 
-              "text-[#5544DF] font-semibold"
+              isActiveLink(navLink) && "text-[#5544DF] font-semibold"
             )}
             onClick={() => handleNavigation(navLink)}
           >
