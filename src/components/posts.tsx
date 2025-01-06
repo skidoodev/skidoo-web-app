@@ -7,11 +7,47 @@ import { urlFor } from '@/sanity/lib/image';
 import { LikeButton } from "./like-button";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { HeartIcon } from "lucide-react";
 
 export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
   const router = useRouter();
   const [posts, setPosts] = useState(initialPosts);
   const [searchTerm, setSearchTerm] = useState("");
+  const [userId] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return localStorage.getItem('userId') || '';
+  });
+
+  useEffect(() => {
+    const fetchLikesForPosts = async () => {
+      try {
+        const likesPromises = initialPosts.map(post =>
+          fetch(`/api/likes?postId=${post._id}&userId=${userId}`)
+            .then(res => res.json())
+        );
+        
+        const likesData = await Promise.all(likesPromises);
+        
+        const updatedPosts = initialPosts.map((post, index) => ({
+          ...post,
+          likes: likesData[index].likes || 0
+        }));
+
+        setPosts(updatedPosts);
+      } catch (error) {
+        console.error('Error fetching likes:', error);
+      }
+    };
+
+    if (userId) {
+      fetchLikesForPosts();
+    }
+  }, [initialPosts, userId]);
+
+  const topPosts = posts
+    .filter(post => post?.mainImage?.asset?._ref)
+    .sort((a, b) => (b.likes || 0) - (a.likes || 0))
+    .slice(0, 4);
 
   const filteredPosts = posts.filter((post) => {
     const lowercasedSearchTerm = searchTerm.toLowerCase();
@@ -50,50 +86,101 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
         </div>
       </div>
 
-      {/* Post Cards */}
-      <div className="sm:px-16 2xl:px-24 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-12 relative z-20">
-        {filteredPosts.map((post) => (
-          <Link 
-            key={post._id} 
-            href={`/posts/${post?.slug?.current}`} 
-            className="relative w-full max-w-[350px] max-h-[480px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all justify-self-center flex"
-          >
-            <div
-              className="flex flex-col bg-white rounded-lg overflow-hidden border-[1px] border-transparent transition-all w-full"
+      {/* Top Posts Section */}
+      <div className="sm:px-16 2xl:px-24 mb-28">
+        <h2 className="text-4xl font-bold px-8 mb-12">
+          Most Popular
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+          {topPosts.map((post, index) => (
+            <Link
+              key={post._id}
+              href={`/posts/${post?.slug?.current}`}
+              className={`relative w-full max-w-[350px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all justify-self-center flex ${
+                index > 2 ? 'hidden 2xl:flex' : ''
+              }`}
             >
-              <div className="block group bg-white rounded-lg p-3 flex-grow">
-                <div className="relative aspect-square rounded-xl overflow-hidden">
-                  {post?.mainImage?.asset?._ref && (
-                    <Image
-                      src={urlFor(post.mainImage.asset._ref).width(600).height(450).url()}
-                      alt={post.title ?? "Blog image"}
-                      fill
-                      className="object-cover"
-                    />
-                  )}
+              <div className="flex flex-col bg-white rounded-lg overflow-hidden border-[1px] border-transparent transition-all w-full">
+                <div className="block group bg-white rounded-lg p-3 flex-grow">
+                  <div className="relative aspect-square rounded-xl overflow-hidden">
+                    {post?.mainImage?.asset?._ref && (
+                      <Image
+                        src={urlFor(post.mainImage.asset._ref).width(600).height(450).url()}
+                        alt={post.title ?? "Blog image"}
+                        fill
+                        className="object-cover"
+                      />
+                    )}
+                  </div>
+                  <div className="p-4 flex flex-col">
+                    <div className="flex justify-between items-start mb-2">
+                      <h2 className="text-xl font-semibold text-gray-900 line-clamp-2">{post?.title}</h2>
+                    </div>
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-1">
+                      {post.categories ? post.categories.join(", ") : "Uncategorized"}
+                    </p>
+                    <p className="text-sm text-gray-400 mt-auto">
+                      By {post.author?.name || "Unknown Author"}
+                    </p>
+                  </div>
                 </div>
-
-                <div className="p-4 flex flex-col">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">{post?.title}</h2>
-                  <p className="text-sm text-gray-600 line-clamp-2 mb-1">
-                    {post.categories ? post.categories.join(", ") : "Uncategorized"}
-                  </p>
-                  <p className="text-sm text-gray-400 mt-auto">
-                    By {post.author?.name || "Unknown Author"}
-                  </p>
+                <div>
+                  <div className="absolute bottom-4 right-4">
+                    <LikeButton postId={post._id} initialLikes={post.likes || 0} />
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="absolute bottom-4 right-4">
-                  <LikeButton postId={post._id} initialLikes={post.likes || 0} />
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
       </div>
 
-      {/* Button */}
+      {/* All Posts Section */}
+      <div className="sm:px-16 2xl:px-24">
+        <h2 className="text-4xl font-bold px-8 mb-12">
+          All Posts
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-12 relative z-20">
+          {filteredPosts.map((post) => (
+            <Link 
+              key={post._id} 
+              href={`/posts/${post?.slug?.current}`} 
+              className="relative w-full max-w-[350px] max-h-[480px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all justify-self-center flex"
+            >
+              <div className="flex flex-col bg-white rounded-lg overflow-hidden border-[1px] border-transparent transition-all w-full">
+                <div className="block group bg-white rounded-lg p-3 flex-grow">
+                  <div className="relative aspect-square rounded-xl overflow-hidden">
+                    {post?.mainImage?.asset?._ref && (
+                      <Image
+                        src={urlFor(post.mainImage.asset._ref).width(600).height(450).url()}
+                        alt={post.title ?? "Blog image"}
+                        fill
+                        className="object-cover"
+                      />
+                    )}
+                  </div>
+
+                  <div className="p-4 flex flex-col">
+                    <h2 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">{post?.title}</h2>
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-1">
+                      {post.categories ? post.categories.join(", ") : "Uncategorized"}
+                    </p>
+                    <p className="text-sm text-gray-400 mt-auto">
+                      By {post.author?.name || "Unknown Author"}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <div className="absolute bottom-4 right-4">
+                    <LikeButton postId={post._id} initialLikes={post.likes || 0} />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       <div className="flex justify-center items-center mt-20 relative z-20">
         <Button
           onClick={() => router.push("/")}
