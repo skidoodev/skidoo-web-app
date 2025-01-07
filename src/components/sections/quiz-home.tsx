@@ -104,7 +104,7 @@ const Form: React.FC = () => {
   return (
     <div className="relative w-full mt-40 mb-20">
       <h2 className="text-4xl flex justify-center font-bold sm:text-5xl bg-gradient-to-r from-[#2472FC] to-[#8711C1] text-transparent bg-clip-text mb-8">
-        Tailor Your Travel Experience
+        Request your personalized itinerary
       </h2>
       <div
         className="flex transition-transform duration-500 ease-in-out"
