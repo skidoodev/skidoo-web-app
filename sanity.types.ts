@@ -101,6 +101,12 @@ export type Post = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
+  tags?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "tag";
+  }>;
   publishedAt?: string;
   body?: Array<
     | {
@@ -388,6 +394,15 @@ export type Category = {
   description?: string;
 };
 
+export type Tag = {
+  _id: string;
+  _type: "tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+};
+
 export type Slug = {
   _type: "slug";
   current?: string;
@@ -494,6 +509,7 @@ export type AllSanitySchemaTypes =
   | Post
   | Author
   | Category
+  | Tag
   | Slug
   | BlockContent
   | SanityImageCrop
@@ -518,6 +534,7 @@ export type POSTS_QUERYResult = Array<{
     };
   } | null;
   categories?: Array<string | null>;
+  tags?: Array<string | null>;
   author?: { name: string } | null;
   likes: number;
 }>;
@@ -573,6 +590,7 @@ export type POST_QUERYResult = {
     _type: "image";
   } | null;
   categories?: Array<string | null>;
+  tags?: Array<string | null>;
   author?: { name: string } | null;
   fullItinnerary?: {
     itineraryStep1?: Array <
