@@ -7,6 +7,7 @@ export const POSTS_QUERY = defineQuery(`*[_type == "post" && defined(slug.curren
   slug, 
   mainImage, 
   "categories": categories[]->title, 
+  "tags": tags[]->title, 
   author->{name},
   "likes": count(*[_type == "like" && post._ref == ^._id])
 }`);
@@ -24,6 +25,7 @@ export const POST_QUERY = defineQuery(`*[_type == "post" && slug.current == $slu
   faqs,
   mainImage, 
   "categories": categories[]->title, 
+  "tags": tags[]->title, 
   author->{name},
   "likes": count(*[_type == "like" && post._ref == ^._id])
 }`);

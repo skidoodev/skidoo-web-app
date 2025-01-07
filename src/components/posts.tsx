@@ -7,7 +7,6 @@ import { urlFor } from '@/sanity/lib/image';
 import { LikeButton } from "./like-button";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { HeartIcon } from "lucide-react";
 
 export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
   const router = useRouter();
@@ -49,6 +48,9 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
     .sort((a, b) => (b.likes || 0) - (a.likes || 0))
     .slice(0, 4);
 
+  const topGetawaysPosts = posts.filter(post => post.tags?.includes("Top Getaways"));
+  const withinCityPosts = posts.filter(post => post.tags?.includes("Within the city"));
+
   const filteredPosts = posts.filter((post) => {
     const lowercasedSearchTerm = searchTerm.toLowerCase();
     const titleMatches = post.title?.toLowerCase().includes(lowercasedSearchTerm);
@@ -62,6 +64,7 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
 
   return (
     <section className="relative pb-12 bg-[url('/background.png')] bg-bottom bg-no-repeat bg-contain">
+      {/* Hero Section */}
       <div className="relative py-[100px] bg-gradient-to-r from-[#8711C1] to-[#2472FC] mb-20 overflow-hidden">
         <div className="absolute inset-0 opacity-40">
           <Image
@@ -88,9 +91,11 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
 
       {/* Top Posts Section */}
       <div className="sm:px-16 2xl:px-24 mb-28">
-        <h2 className="text-4xl font-bold px-8 mb-12">
-          Most Popular
-        </h2>
+        <div className="text-4xl font-bold px-8 mb-12 flex items-center">
+          <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
+          <span>Most Popular</span>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
           {topPosts.map((post, index) => (
             <Link
@@ -135,11 +140,108 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
         </div>
       </div>
 
+      {/* Top Getaways Section */}
+      <div className="sm:px-16 2xl:px-24 mb-28">
+        <div className="text-4xl font-bold px-8 mb-12 flex items-center">
+          <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
+          <span>Top Getaways</span>
+        </div>
+        <div className="overflow-x-auto">
+          <div className="flex gap-8 px-8 pb-4 min-w-max">
+            {topGetawaysPosts.map((post) => (
+              <Link
+                key={post._id}
+                href={`/posts/${post?.slug?.current}`}
+                className="relative w-[350px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all flex-shrink-0"
+              >
+                <div className="flex flex-col bg-white rounded-lg overflow-hidden border-[1px] border-transparent transition-all w-full">
+                  <div className="block group bg-white rounded-lg p-3 flex-grow">
+                    <div className="relative aspect-square rounded-xl overflow-hidden">
+                      {post?.mainImage?.asset?._ref && (
+                        <Image
+                          src={urlFor(post.mainImage.asset._ref).width(600).height(450).url()}
+                          alt={post.title ?? "Blog image"}
+                          fill
+                          className="object-cover"
+                        />
+                      )}
+                    </div>
+                    <div className="p-4 flex flex-col">
+                      <h2 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">{post?.title}</h2>
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-1">
+                        {post.categories ? post.categories.join(", ") : "Uncategorized"}
+                      </p>
+                      <p className="text-sm text-gray-400 mt-auto">
+                        By {post.author?.name || "Unknown Author"}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="absolute bottom-4 right-4">
+                      <LikeButton postId={post._id} initialLikes={post.likes || 0} />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Within the City Section */}
+      <div className="sm:px-16 2xl:px-24 mb-28">
+        <div className="text-4xl font-bold px-8 mb-12 flex items-center">
+          <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
+          <span>Within the City</span>
+        </div>
+        <div className="overflow-x-auto">
+          <div className="flex gap-8 px-8 pb-4 min-w-max">
+            {withinCityPosts.map((post) => (
+              <Link
+                key={post._id}
+                href={`/posts/${post?.slug?.current}`}
+                className="relative w-[350px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all flex-shrink-0"
+              >
+                <div className="flex flex-col bg-white rounded-lg overflow-hidden border-[1px] border-transparent transition-all w-full">
+                  <div className="block group bg-white rounded-lg p-3 flex-grow">
+                    <div className="relative aspect-square rounded-xl overflow-hidden">
+                      {post?.mainImage?.asset?._ref && (
+                        <Image
+                          src={urlFor(post.mainImage.asset._ref).width(600).height(450).url()}
+                          alt={post.title ?? "Blog image"}
+                          fill
+                          className="object-cover"
+                        />
+                      )}
+                    </div>
+                    <div className="p-4 flex flex-col">
+                      <h2 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">{post?.title}</h2>
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-1">
+                        {post.categories ? post.categories.join(", ") : "Uncategorized"}
+                      </p>
+                      <p className="text-sm text-gray-400 mt-auto">
+                        By {post.author?.name || "Unknown Author"}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="absolute bottom-4 right-4">
+                      <LikeButton postId={post._id} initialLikes={post.likes || 0} />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* All Posts Section */}
       <div className="sm:px-16 2xl:px-24">
-        <h2 className="text-4xl font-bold px-8 mb-12">
-          All Posts
-        </h2>
+        <div className="text-4xl font-bold px-8 mb-12 flex items-center">
+          <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
+          <span>All Posts</span>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-12 relative z-20">
           {filteredPosts.map((post) => (
             <Link 
