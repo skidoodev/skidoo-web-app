@@ -90,8 +90,8 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
       </div>
 
       {/* Top Posts Section */}
-      <div className="sm:px-16 2xl:px-24 mb-28">
-        <div className="text-4xl font-bold 2xl:px-8 mb-12 flex items-center">
+      <div className="sm:px-16 2xl:px-[40px] mb-24">
+        <div className="text-4xl font-bold 2xl:px-[50px] mb-12 flex items-center">
           <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
           <span>Most Popular</span>
         </div>
@@ -141,20 +141,20 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
       </div>
 
       {/* Top Getaways Section */}
-      <div className="sm:px-16 2xl:px-24 mb-28">
-        <div className="text-4xl font-bold 2xl:px-8 mb-12 flex items-center">
+      <div className="sm:px-16 2xl:px-4 mb-4">
+        <div className="text-4xl font-bold 2xl:px-[75px] mb-12 flex items-center">
           <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
           <span>Top Getaways</span>
         </div>
-        <div className="overflow-x-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="overflow-x-auto scrollbar-hide -mx-4">
+          <div className="inline-flex gap-8 2xl:gap-[112px] 2xl:px-[88px] pb-20 pt-2">
             {topGetawaysPosts.map((post) => (
               <Link
                 key={post._id}
                 href={`/posts/${post?.slug?.current}`}
-                className="relative w-full max-w-[350px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all justify-self-center flex"
+                className="relative flex-none w-[315px] 2xl:w-[350px] h-[450px] 2xl:h-[480px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all"
               >
-                <div className="flex flex-col bg-white rounded-lg overflow-hidden border-[1px] border-transparent transition-all w-full">
+                <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden">
                   <div className="block group bg-white rounded-lg p-3 flex-grow">
                     <div className="relative aspect-square rounded-xl overflow-hidden">
                       {post?.mainImage?.asset?._ref && (
@@ -176,10 +176,8 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
                       </p>
                     </div>
                   </div>
-                  <div>
-                    <div className="absolute bottom-4 right-4">
-                      <LikeButton postId={post._id} initialLikes={post.likes || 0} />
-                    </div>
+                  <div className="absolute bottom-4 right-4">
+                    <LikeButton postId={post._id} initialLikes={post.likes || 0} />
                   </div>
                 </div>
               </Link>
@@ -189,20 +187,20 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
       </div>
 
       {/* Within the City Section */}
-      <div className="sm:px-16 2xl:px-24 mb-28">
-        <div className="text-4xl font-bold 2xl:px-8 mb-12 flex items-center">
+      <div className="sm:px-16 2xl:px-4 mb-8">
+        <div className="text-4xl font-bold 2xl:px-[75px] mb-12 flex items-center">
           <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
           <span>Within the City</span>
         </div>
-        <div className="overflow-x-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="overflow-x-auto scrollbar-hide -mx-4">
+          <div className="inline-flex gap-8 2xl:gap-[112px] 2xl:px-[88px] pb-20 pt-2">
             {withinCityPosts.map((post) => (
               <Link
                 key={post._id}
                 href={`/posts/${post?.slug?.current}`}
-                className="relative w-full max-w-[350px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all justify-self-center flex"
+                className="relative flex-none w-[315px] 2xl:w-[350px] h-[450px] 2xl:h-[480px] p-[3px] bg-gradient-to-r from-[#2472FC] to-[#8711C1] rounded-2xl shadow-xl hover:shadow-2xl duration-300 transition-all"
               >
-                <div className="flex flex-col bg-white rounded-lg overflow-hidden border-[1px] border-transparent transition-all w-full">
+                <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden">
                   <div className="block group bg-white rounded-lg p-3 flex-grow">
                     <div className="relative aspect-square rounded-xl overflow-hidden">
                       {post?.mainImage?.asset?._ref && (
@@ -224,10 +222,8 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
                       </p>
                     </div>
                   </div>
-                  <div>
-                    <div className="absolute bottom-4 right-4">
-                      <LikeButton postId={post._id} initialLikes={post.likes || 0} />
-                    </div>
+                  <div className="absolute bottom-4 right-4">
+                    <LikeButton postId={post._id} initialLikes={post.likes || 0} />
                   </div>
                 </div>
               </Link>
@@ -237,8 +233,8 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
       </div>
 
       {/* All Posts Section */}
-      <div className="sm:px-16 2xl:px-24">
-        <div className="text-4xl font-bold 2xl:px-8 mb-12 flex items-center">
+      <div className="sm:px-12 2xl:px-[45px] mb-24">
+        <div className="text-4xl font-bold 2xl:px-[45px] mb-12 flex items-center">
           <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
           <span>All Posts</span>
         </div>
