@@ -90,8 +90,8 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
       </div>
 
       {/* Top Posts Section */}
-      <div className="sm:px-16 2xl:px-[40px] mb-24">
-        <div className="text-4xl font-bold 2xl:px-[50px] mb-12 flex items-center">
+      <div className="sm:px-12 2xl:px-[40px] mb-24">
+        <div className="text-4xl font-bold px-4 2xl:px-[50px] mb-12 flex items-center">
           <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
           <span>Most Popular</span>
         </div>
@@ -234,7 +234,7 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
 
       {/* All Posts Section */}
       <div className="sm:px-12 2xl:px-[45px] mb-24">
-        <div className="text-4xl font-bold 2xl:px-[45px] mb-12 flex items-center">
+        <div className="text-4xl font-bold px-4 2xl:px-[45px] mb-12 flex items-center">
           <Image className="pr-4" src="/bullet.png" alt="bullet point" height={45} width={45} />
           <span>All Posts</span>
         </div>
