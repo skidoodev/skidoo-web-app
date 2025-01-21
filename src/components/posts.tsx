@@ -48,8 +48,8 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
     .sort((a, b) => (b.likes || 0) - (a.likes || 0))
     .slice(0, 4);
 
-  const topGetawaysPosts = posts.filter(post => post.tags?.includes("Top Getaways"));
-  const withinCityPosts = posts.filter(post => post.tags?.includes("Within the city"));
+  const topGetawaysPosts = posts.filter(post => Array.isArray(post.tags) && post.tags.length > 0 && post.tags.includes("Top Getaways"));
+  const withinCityPosts = posts.filter(post => Array.isArray(post.tags) && post.tags.length > 0 && post.tags.includes("Within the city"));
 
   const filteredPosts = posts.filter((post) => {
     const lowercasedSearchTerm = searchTerm.toLowerCase();
