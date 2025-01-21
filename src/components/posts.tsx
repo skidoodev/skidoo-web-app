@@ -51,13 +51,6 @@ export function Posts({ posts: initialPosts }: { posts: POSTS_QUERYResult }) {
   const topGetawaysPosts = posts.filter(post => Array.isArray(post.tags) && post.tags.length > 0 && post.tags.includes("Top Getaways"));
   const withinCityPosts = posts.filter(post => Array.isArray(post.tags) && post.tags.length > 0 && post.tags.includes("Within the city"));
 
-  useEffect(() => {
-    console.dir(posts)
-    console.log("topGetawaysPosts")
-    console.dir(topGetawaysPosts)
-
-  }, [posts, topGetawaysPosts])
-
   const filteredPosts = posts.filter((post) => {
     const lowercasedSearchTerm = searchTerm.toLowerCase();
     const titleMatches = post.title?.toLowerCase().includes(lowercasedSearchTerm);

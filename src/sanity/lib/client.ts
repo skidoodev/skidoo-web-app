@@ -24,7 +24,7 @@ export async function clientSanityFetch<QueryResponse>({
   tags?: string[];
 }) {
   return client.fetch<QueryResponse>(query, params, {
-    cache: revalidate === false ? undefined : 'force-cache',
+    cache: revalidate === false ? undefined : 'no-store',
     next: {
       revalidate,
       tags,
