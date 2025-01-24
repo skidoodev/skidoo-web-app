@@ -1,11 +1,10 @@
 import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
-
 import { Inter } from "next/font/google";
-
 import { TRPCReactProvider } from "@/trpc/react";
 import { constructMetadata } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,6 +34,7 @@ export default function RootLayout({
         >
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </body>
+        <GoogleAnalytics gaId="G-DSMSTJGWCW" />
       </html>
     </ClerkProvider>
   );
