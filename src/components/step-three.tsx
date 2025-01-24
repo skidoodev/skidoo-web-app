@@ -60,8 +60,7 @@ const StepThree: React.FC<StepThreeProps> = ({
               />
               <label
                 htmlFor="email"
-                className="flex gap-1 text-lg text-gray-700 items-center absolute top-3 left-4 
-                transition-all duration-200 peer-focus:text-muted-foreground peer-focus:text-base peer-focus:top-3"
+                className="flex gap-1 text-lg text-gray-700 items-center absolute top-3 left-4 transition-all duration-200 peer-focus:text-muted-foreground peer-focus:text-base peer-focus:top-3"
               >
                 <IconContext.Provider value={{ size: "18px", color: "#3b82f6" }}>
                   <MdEmail />
