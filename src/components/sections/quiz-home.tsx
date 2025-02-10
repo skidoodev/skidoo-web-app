@@ -6,7 +6,6 @@ import { DateRange as DayPickerDateRange } from "react-day-picker";
 import StepOne from "../step-one";
 import StepTwo from "../step-two";
 import StepThree from "../step-three";
-import { sendTravelFormEmail } from "@/app/api/send/route";
 
 interface DateRange {
   from: Date | undefined;
@@ -70,11 +69,8 @@ const Form: React.FC = () => {
         description,
         email
       };
-    
-      // Send form data to backend and send email
+      
       await axios.post("/api/submit-travel-form", formData);
-      await sendTravelFormEmail(formData);
-    
       router.push('/success');
     } catch (error) {
       console.error('Form submission error:', error);

@@ -1,11 +1,11 @@
-"use server"
+import { NextResponse } from 'next/server';
 import { env } from '@/env';
 import { Resend } from 'resend';
 
 const resend = new Resend(env.RESEND_API_KEY);
 
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
+const formatDate = (timestamp: number) => {
+  const date = new Date(timestamp);
   return date.toLocaleDateString('en-US', {
     weekday: 'short',
     day: 'numeric',
@@ -14,10 +14,23 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export const sendTravelFormEmail = async (formData: any) => {
-  const { destination, adults, children, pets, seniors, description, startDate, endDate, travelerTypes, email } = formData;
+interface TravelFormData {
+  destination: string;
+  startDate: number;
+  endDate: number;
+  adults: number;
+  children: number;
+  pets: number;
+  seniors: number;
+  travelerTypes: string[];
+  description: string;
+  email: string;
+}
 
+export async function POST(request: Request) {
   try {
+    const formData: TravelFormData = await request.json();
+    
     const response = await resend.emails.send({
       from: "onboarding@theskidoo.com",
       to: "hello@theskidoo.com",
@@ -79,34 +92,38 @@ export const sendTravelFormEmail = async (formData: any) => {
           <body>
             <div class="header">
               <h1 class="title">New Travel Form Submission</h1>
-              <div class="contact-email">${email}</div>
+              <div class="contact-email">${formData.email}</div>
             </div>
             
             <div class="section">
-              <div><span class="label">Destination:</span><span class="value">${destination}</span></div>
-              <div><span class="label">Travel Dates:</span><span class="value">${formatDate(startDate)} - ${formatDate(endDate)}</span></div>
+              <div><span class="label">Destination:</span><span class="value">${formData.destination}</span></div>
+              <div><span class="label">Travel Dates:</span><span class="value">${formatDate(formData.startDate)} - ${formatDate(formData.endDate)}</span></div>
             </div>
 
             <div class="section">
               <div><span class="label">Travelers:</span></div>
-              <div><span class="label">• Adults:</span><span class="value">${adults}</span></div>
-              <div><span class="label">• Children:</span><span class="value">${children}</span></div>
-              <div><span class="label">• Seniors:</span><span class="value">${seniors}</span></div>
-              <div><span class="label">• Pets:</span><span class="value">${pets}</span></div>
-              <div><span class="label">• Types:</span><span class="value">${travelerTypes.join(", ")}</span></div>
+              <div><span class="label">• Adults:</span><span class="value">${formData.adults}</span></div>
+              <div><span class="label">• Children:</span><span class="value">${formData.children}</span></div>
+              <div><span class="label">• Seniors:</span><span class="value">${formData.seniors}</span></div>
+              <div><span class="label">• Pets:</span><span class="value">${formData.pets}</span></div>
+              <div><span class="label">• Types:</span><span class="value">${formData.travelerTypes.join(", ")}</span></div>
             </div>
 
             <div class="section">
               <div class="label">Trip Description:</div>
-              <div class="description">${description}</div>
+              <div class="description">${formData.description}</div>
             </div>
           </body>
         </html>
       `,
     });
 
-    console.log("Email sent successfully:", response);
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error('Form submission error:', error);
+    return NextResponse.json(
+      { error: 'Failed to submit form' }, 
+      { status: 500 }
+    );
   }
-};
+}
