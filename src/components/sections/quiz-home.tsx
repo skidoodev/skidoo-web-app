@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useUser } from "@clerk/nextjs";
 import { DateRange as DayPickerDateRange } from "react-day-picker";
 import StepOne from "../step-one";
 import StepTwo from "../step-two";
@@ -21,6 +22,7 @@ interface GroupSizeType {
 
 const Form: React.FC = () => {
   const router = useRouter();
+  const { user } = useUser(); // Clerk user hook
   const [step, setStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [destination, setDestination] = useState("");
@@ -38,6 +40,13 @@ const Form: React.FC = () => {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
+
+  // Autofill email if the user is logged in
+  useEffect(() => {
+    if (user?.primaryEmailAddress) {
+      setEmail(user.primaryEmailAddress.emailAddress);
+    }
+  }, [user]);
 
   const handleDateRangeChange = (range: DayPickerDateRange | undefined) => {
     setDateRange({
@@ -66,18 +75,25 @@ const Form: React.FC = () => {
         pets: groupSize.pets,
         seniors: groupSize.seniors,
         travelerTypes: selectedTypes,
-        description,
-        email
+        description: description || "", // Ensure description is never undefined
+        email,
       };
+  
+      const response = await axios.post("/api/submit-travel-form", formData);
       
-      await axios.post("/api/submit-travel-form", formData);
-      router.push('/success');
+      if (response.status === 200) {
+        router.push('/success');
+      } else {
+        throw new Error(`Unexpected response status: ${response.status}`);
+      }
     } catch (error) {
       console.error('Form submission error:', error);
-      if (axios.isAxiosError(error)) {
-        console.error('Detailed error:', error.response?.data);
+      if (axios.isAxiosError(error) && error.response) {
+        console.error('Server response:', error.response.data);
+        alert(error.response.data.message || 'Failed to submit form. Please try again.');
+      } else {
+        alert('Failed to submit form. Please try again.');
       }
-      alert('Failed to submit form. Please try again.');
     }
   };
 

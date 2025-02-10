@@ -1,6 +1,8 @@
 import { db } from "@/server/db";
 import { travelForm } from "@/server/db/schema";
 import { z } from "zod";
+import { NextResponse } from 'next/server';
+import { sendTravelFormEmail } from "../send/route";
 
 const travelFormSchema = z.object({
   destination: z.string().min(1),
@@ -18,8 +20,6 @@ const travelFormSchema = z.object({
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
-    // Validate incoming data
     const validatedData = travelFormSchema.parse(body);
 
     // Insert into database
@@ -29,22 +29,26 @@ export async function POST(req: Request) {
       endDate: new Date(validatedData.endDate),
     });
 
-    return new Response(
-      JSON.stringify({ message: "Form submitted successfully" }),
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Form submission error:", error);
+    // Send email notification
+    await sendTravelFormEmail(validatedData);
 
+    return NextResponse.json({ message: "Form submitted successfully" });
+    
+  } catch (error) {
+    console.error("Server error:", error);
+    
     if (error instanceof z.ZodError) {
-      return new Response(
-        JSON.stringify({ message: "Validation failed", errors: error.errors }),
+      return NextResponse.json(
+        { message: "Validation failed", errors: error.errors },
         { status: 400 }
       );
     }
 
-    return new Response(
-      JSON.stringify({ message: "Internal server error" }),
+    return NextResponse.json(
+      { 
+        message: "Internal server error", 
+        error: error instanceof Error ? error.message : "Unknown error" 
+      },
       { status: 500 }
     );
   }
