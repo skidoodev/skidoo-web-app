@@ -26,30 +26,28 @@ export async function POST(req: Request) {
     await db.insert(travelForm).values({
       ...validatedData,
       startDate: new Date(validatedData.startDate),
-      endDate: new Date(validatedData.endDate),
+      endDate: new Date(validatedData.endDate)
     });
 
-    // Send email notification
     await sendTravelFormEmail(validatedData);
-
-    return NextResponse.json({ message: "Form submitted successfully" });
     
+    return NextResponse.json({ message: "Success" });
   } catch (error) {
-    console.error("Server error:", error);
-    
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { message: "Validation failed", errors: error.errors },
-        { status: 400 }
-      );
+    // Specific error handling
+    if (error instanceof Error) {
+      console.error('Server error:', {
+        message: error.message,
+        name: error.name,
+        cause: error.cause
+      });
+      
+      return NextResponse.json({ 
+        error: `Database error: ${error.message}` 
+      }, { status: 500 });
     }
-
-    return NextResponse.json(
-      { 
-        message: "Internal server error", 
-        error: error instanceof Error ? error.message : "Unknown error" 
-      },
-      { status: 500 }
-    );
+    
+    return NextResponse.json({ 
+      error: 'Unknown error occurred' 
+    }, { status: 500 });
   }
 }
