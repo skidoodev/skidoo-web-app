@@ -114,39 +114,40 @@ const Form: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full mt-40 mb-20">
+    <div className="relative w-full mt-16 sm:mt-20 mb-10 sm:mb-16">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl px-8 font-bold sm:text-5xl bg-gradient-to-r from-[#2472FC] to-[#8711C1] text-transparent bg-clip-text mb-8">
+        <h2 className="text-4xl px-4 sm:px-8 font-bold sm:text-5xl bg-gradient-to-r from-[#2472FC] to-[#8711C1] text-transparent bg-clip-text mb-4 sm:mb-6">
           Request your personalized itinerary
         </h2>
       </div>
-      <div
-        className="flex transition-transform duration-500 ease-in-out"
-        style={{
-          transform: `translateX(-${step * 100}%)`,
-        }}
-      >
-        <div className="w-full flex-shrink-0 flex items-center justify-center">
-          <StepOne
-            destination={destination}
-            setDestination={setDestination}
-            dateRange={dateRange}
-            setDateRange={handleDateRangeChange}
-            groupSize={groupSize}
-            setGroupSize={setGroupSize}
-            groupSizeOpen={groupSizeOpen}
-            setGroupSizeOpen={setGroupSizeOpen}
-          />
-        </div>
+      <div className="overflow-hidden w-full">
+        <div
+          className="flex transition-transform duration-500 ease-in-out"
+          style={{
+            transform: `translateX(-${step * 100}%)`,
+          }}
+        >
+          <div className="w-full flex-shrink-0 flex items-center justify-center px-4">
+            <StepOne
+              destination={destination}
+              setDestination={setDestination}
+              dateRange={dateRange}
+              setDateRange={handleDateRangeChange}
+              groupSize={groupSize}
+              setGroupSize={setGroupSize}
+              groupSizeOpen={groupSizeOpen}
+              setGroupSizeOpen={setGroupSizeOpen}
+            />
+          </div>
 
-        <div className="w-full flex-shrink-0 flex items-center justify-center">
+        <div className="w-full min-w-full flex-shrink-0 flex items-center justify-center px-4">
           <StepTwo
             selectedTypes={selectedTypes}
             setSelectedTypes={setSelectedTypes}
           />
         </div>
 
-        <div className="w-full flex-shrink-0 flex items-center justify-center">
+        <div className="w-full flex-shrink-0 flex items-center justify-center px-4">
           <StepThree
             description={description}
             setDescription={setDescription}
@@ -155,7 +156,7 @@ const Form: React.FC = () => {
           />
         </div>
       </div>
-
+    </div>
       <div
         className={`absolute left-1/2 transform -translate-x-1/2 translate-y-1/2 flex justify-center items-center w-full px-4
           transition-all duration-500 ease-in-out

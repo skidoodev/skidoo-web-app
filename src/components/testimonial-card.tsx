@@ -82,54 +82,59 @@ export const TestimonialCard: React.FC = () => {
   return (
     <section 
       ref={componentRef}
-      className="relative"
+      className="relative w-full max-w-full sm:max-w-4xl overflow-x-hidden"
       onMouseEnter={testimonialData.length > 1 ? () => setIsHovered(true) : undefined}
       onMouseLeave={testimonialData.length > 1 ? () => setIsHovered(false) : undefined}
     >
+      {/* Image positioned outside for better visibility */}
+      <div className="relative z-20 mx-auto w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] mb-[-60px] sm:mb-[-70px]">
+        <div className="bg-white rounded-full p-1 shadow-lg">
+          <Image
+            quality={100}
+            height={150}
+            width={140}
+            src={testimonial.image}
+            alt={testimonial.name}
+            className="rounded-full border-2 shadow-xl border-white w-full h-full object-cover"
+          />
+        </div>
+      </div>
+
       <div 
         className={`
-          max-w-5xl border-4 border-white bg-gradient-to-r from-[#8711C1] to-[#2472FC] 
-          relative h-[21rem] hover:shadow-2xl shadow-xl transition-all duration-300 
-          rounded-2xl hover:scale-105 mb-4
+          w-full border-4 border-white bg-gradient-to-r from-[#8711C1] to-[#2472FC] 
+          relative pt-[65px] sm:pt-[75px] min-h-[350px] sm:min-h-[320px] hover:shadow-2xl shadow-xl transition-all duration-300 
+          rounded-2xl hover:scale-[1.02] mb-4
           ${isAnimating ? 'animate-slide-out' : 'animate-slide-in'}
         `}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50 pointer-events-none z-10 rounded-2xl"></div>
 
-        <div className="absolute z-10 -top-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="bg-white rounded-3xl p-[1px]">
-            <Image
-              quality={100}
-              height={150}
-              width={180}
-              src={testimonial.image}
-              alt={testimonial.name}
-              className="rounded-3xl border-2 shadow-xl border-white"
-            />
-          </div>
-        </div>
+        <div className="relative h-full z-20 flex flex-col justify-between pb-4 sm:pb-8">
+          <div>
+            <div className="flex justify-start pl-4 sm:pl-8">
+              <Image
+                quality={100}
+                height={64}
+                width={80}
+                src={"/quote.png"}
+                alt={"quote"}
+                className="h-10 w-12 sm:h-16 sm:w-20"
+              />
+            </div>
 
-        <div className="relative h-full z-20">
-          <div className="flex justify-start pl-8 pt-8">
-            <Image
-              quality={100}
-              height={64}
-              width={80}
-              src={"/quote.png"}
-              alt={"quote"}
-            />
+            <p className="text-base sm:text-lg text-white text-center pt-4 px-4 sm:px-8 md:px-16 overflow-hidden">
+              {testimonial.quote}
+            </p>
           </div>
 
-          <p className="text-xl text-white text-center pt-6 px-16 pb-2">
-            {testimonial.quote}
-          </p>
-
-          <div className="px-16 pt-4 flex justify-between items-center absolute bottom-10 left-0 right-0">
-            <div className="flex flex-col">
-              <div className="text-xl font-bold text-white">
+          {/* Footer section with name, profession and stars */}
+          <div className="px-4 sm:px-8 md:px-16 pt-4 mt-4 sm:mt-6 flex flex-col sm:flex-row justify-between items-center">
+            <div className="flex flex-col items-center sm:items-start mb-2 sm:mb-0">
+              <div className="text-lg sm:text-xl font-bold text-white">
                 {testimonial.name}
               </div>
-              <div className="text-sm text-gray-300">
+              <div className="text-xs sm:text-sm text-gray-300">
                 {testimonial.profession}
               </div>
             </div>
@@ -142,6 +147,7 @@ export const TestimonialCard: React.FC = () => {
                   width={22}
                   src={"/star.png"}
                   alt={"star"}
+                  className="h-4 w-4 sm:h-5 sm:w-5"
                 />
               ))}
               {[...Array(5 - testimonial.rating)].map((_, index) => (
@@ -152,13 +158,20 @@ export const TestimonialCard: React.FC = () => {
                   width={22}
                   src={"/unstar.png"}
                   alt={"unstar"}
+                  className="h-4 w-4 sm:h-5 sm:w-5"
                 />
               ))}
             </div>
           </div>
 
           <div className="absolute opacity-40 bottom-0 left-0 w-full">
-            <Image quality={100} layout="responsive" height={100} width={900} src={"/t-background.png"} alt={"background"} objectFit="cover"/>
+            <Image 
+              src={"/t-background.png"} 
+              alt={"background"} 
+              width={900}  
+              height={100}
+              className="w-full h-auto object-cover"
+            />
           </div>
         </div>
       </div>
@@ -180,7 +193,8 @@ export const TestimonialCard: React.FC = () => {
         }
       `}</style>
 
-      <div className="flex justify-between items-center pt-2 px-4">
+      {/* Hide plane animation on small screens, show simplified version */}
+      <div className="hidden sm:flex justify-between items-center pt-2 px-4">
         <div className="flex items-center gap-3">
           <Image
             quality={100}
@@ -189,13 +203,16 @@ export const TestimonialCard: React.FC = () => {
             src={"/foot1.png"}
             alt={"Plane"}
           />
-          <Image
-            quality={100}
-            height={2}
-            width={400}
-            src={"/foot2.png"}
-            alt={"Dotted line"}
-          />
+          <div className="w-[100px] md:w-[200px] lg:w-[400px]">
+            <Image
+              quality={100}
+              src={"/foot2.png"}
+              alt={"Dotted line"}
+              width={400}
+              height={2}
+              className="w-full h-auto"
+            />
+          </div>
         </div>
         {testimonialData.length > 1 && (
           <div className="absolute left-1/2 transform -translate-x-1/2 flex gap-2 bottom-[22px]">
@@ -211,13 +228,16 @@ export const TestimonialCard: React.FC = () => {
           </div>
         )}
         <div className="flex items-center gap-3">
-          <Image
-            quality={100}
-            height={2}
-            width={425}
-            src={"/foot3.png"}
-            alt={"Dotted line"}
-          />
+          <div className="w-[100px] md:w-[200px] lg:w-[400px]">
+            <Image
+              quality={100}
+              src={"/foot3.png"}
+              alt={"Dotted line"}
+              width={425}
+              height={2}
+              className="w-full h-auto"
+            />
+          </div>
           <Image
             quality={100}
             height={36}
@@ -227,6 +247,21 @@ export const TestimonialCard: React.FC = () => {
           />
         </div>
       </div>
+      
+      {/* Mobile pagination dots */}
+      {testimonialData.length > 1 && (
+        <div className="sm:hidden flex justify-center mt-4">
+          {testimonialData.map((_, index) => (
+            <div
+              key={index}
+              onClick={() => handleSliderClick(index)}
+              className={`h-2 mx-1 rounded-full transition-all duration-300 cursor-pointer ${
+                currentIndex === index ? "bg-[#5048E2] w-6" : "bg-gray-300 w-2"
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };
