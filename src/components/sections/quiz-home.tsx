@@ -1,12 +1,14 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 const Form: React.FC = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRedirect = () => {
+    setIsLoading(true);
     router.push('/itinerary-generator');
   };
 
@@ -27,9 +29,10 @@ const Form: React.FC = () => {
         <div className="flex justify-center mt-8">
           <Button 
             onClick={handleRedirect}
+            disabled={isLoading}
             className="px-8 py-6 text-white font-semibold text-lg rounded-full transition-all duration-300 ease-in-out transform bg-[#5048E2] hover:scale-105 shadow-lg"
           >
-            Create Your Itinerary
+            {isLoading ? 'Loading...' : 'Create Your Itinerary'}
           </Button>
         </div>
       </div>
