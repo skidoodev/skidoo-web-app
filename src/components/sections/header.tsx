@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn, navLinks } from '@/lib/utils';
-import { UserButton, useUser } from "@clerk/nextjs";
+import { UserButton, useUser, useClerk } from "@clerk/nextjs";
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,7 +13,8 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { isLoaded, isSignedIn, user } = useUser();
-
+  const { signOut } = useClerk();
+  
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -240,30 +241,78 @@ export default function Header() {
                     </motion.li>
                   ))}
                   
-                  {isLoaded && !isSignedIn && (
-                    <motion.li 
-                      className="w-full pt-6"
-                      variants={{
-                        hidden: { opacity: 0, y: 20 },
-                        visible: { opacity: 1, y: 0 }
-                      }}
-                    >
-                      <Link href="/sign-up" className="block w-full">
-                        <motion.button 
-                          className="w-full bg-gradient-to-r from-[#8711C1] to-[#2472FC] text-white font-medium text-xl rounded-lg py-4 relative overflow-hidden"
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.98 }}
+                  {isLoaded && (
+                    <>
+                      {isSignedIn ? (
+                        <motion.li 
+                          className="w-full pt-6"
+                          variants={{
+                            hidden: { opacity: 0, y: 20 },
+                            visible: { opacity: 1, y: 0 }
+                          }}
                         >
-                          <span className="absolute inset-0 w-full h-full bg-white opacity-0 hover:opacity-10 transition-opacity"></span>
-                          <span className="relative z-10 flex items-center justify-center">
-                            Sign Up 
-                            <svg className="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                            </svg>
-                          </span>
-                        </motion.button>
-                      </Link>
-                    </motion.li>
+                          <div className="flex flex-col items-center space-y-4">
+                            {/* User info */}
+                            <div className="flex items-center space-x-3 mb-2">
+                              <div className="w-10 h-10 rounded-full overflow-hidden">
+                                {user?.imageUrl && (
+                                  <img 
+                                    src={user.imageUrl} 
+                                    alt="Profile" 
+                                    className="w-full h-full object-cover"
+                                  />
+                                )}
+                              </div>
+                              <span className="text-lg font-medium text-gray-800">
+                                {user?.firstName || 'User'}
+                              </span>
+                            </div>
+                            
+                            {/* Sign out button */}
+                            <button 
+                              onClick={() => {
+                                // Close the mobile menu first
+                                setMobileMenuOpen(false);
+                                // Use Clerk's signOut method
+                                signOut();
+                              }}
+                              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium text-xl rounded-lg py-3 relative overflow-hidden transition-colors"
+                            >
+                              <span className="relative z-10 flex items-center justify-center">
+                                Sign Out
+                                <svg className="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V7.414l-5-5H3zm7 5a1 1 0 10-2 0v4.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L12 12.586V8z" clipRule="evenodd" />
+                                </svg>
+                              </span>
+                            </button>
+                          </div>
+                        </motion.li>
+                      ) : (
+                        <motion.li 
+                          className="w-full pt-6"
+                          variants={{
+                            hidden: { opacity: 0, y: 20 },
+                            visible: { opacity: 1, y: 0 }
+                          }}
+                        >
+                          <Link href="/sign-up" className="block w-full">
+                            <motion.button 
+                              className="w-full bg-gradient-to-r from-[#8711C1] to-[#2472FC] text-white font-medium text-xl rounded-lg py-4 relative overflow-hidden"
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <span className="absolute inset-0 w-full h-full bg-white opacity-0 hover:opacity-10 transition-opacity"></span>
+                              <span className="relative z-10 flex items-center justify-center">
+                                Sign Up 
+                                <svg className="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                              </span>
+                            </motion.button>
+                          </Link>
+                        </motion.li>
+                      )}
+                    </>
                   )}
                 </motion.ul>
               </nav>

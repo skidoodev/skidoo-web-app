@@ -21,8 +21,6 @@ import { api } from "@/trpc/react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { SignInButton, useAuth, useUser } from "@clerk/nextjs";
-import { sendTravelFormEmail } from "@/app/api/send/route";
-
 type GroupSizeType = "adults" | "children" | "pets" | "seniors";
 
 interface FormData {
@@ -79,7 +77,7 @@ export default function Component() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    const stepParam = searchParams.get("step");
+    const stepParam = searchParams?.get("step");
     setStep(stepParam ? parseInt(stepParam, 10) : 0);
   }, [searchParams]);
 

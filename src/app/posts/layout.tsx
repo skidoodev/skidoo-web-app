@@ -1,26 +1,30 @@
-import Header from "@/components/sections/header";
-import { VisualEditing } from "next-sanity";
+// Update the draftMode calls to be properly awaited
 import { draftMode } from "next/headers";
+import Header from "@/components/sections/header";
+import {VisualEditing} from "next-sanity";
 
-export default function RootLayout({
+export default async function PostsLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  // Get the draft mode status once and reuse it
+  const { isEnabled: isDraftMode } = await draftMode();
+
   return (
     <html lang="en">
       <body>
-      <Header />
-        {draftMode().isEnabled && (
+        <Header />
+        {isDraftMode && (
           <a
             className="fixed bottom-0 right-0 m-4 bg-blue-500 p-4 text-white"
             href="/api/draft-mode/disable"
           >
-            Disable preview mode
+            Exit Draft Mode
           </a>
         )}
         {children}
-        {draftMode().isEnabled && <VisualEditing />}
+        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   );
