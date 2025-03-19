@@ -6,7 +6,6 @@
       "src/app/api/**/*.js": {
         "maxDuration": 60
       }
-    },
-    "includeFiles": ["middleware.ts"]
+    }
   }
   
