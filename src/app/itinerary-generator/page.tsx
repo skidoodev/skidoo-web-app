@@ -10,6 +10,7 @@ export default function ItineraryGeneratorPage() {
   const [destination, setDestination] = useState('');
   const [duration, setDuration] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerateItinerary = async (formData: {
     destination: string;
@@ -19,6 +20,7 @@ export default function ItineraryGeneratorPage() {
     preferences: string;
   }) => {
     setIsLoading(true);
+    setError(null);
     
     try {
       const response = await fetch('/api/generate-itinerary', {
@@ -29,18 +31,21 @@ export default function ItineraryGeneratorPage() {
         body: JSON.stringify(formData),
       });
       
-      if (!response.ok) {
-        throw new Error('Failed to generate itinerary');
-      }
-      
       const data = await response.json();
+      
+      if (!response.ok) {
+        // Extract the specific error message from the response
+        const errorMessage = data.message || 'Failed to generate itinerary. Please try again.';
+        setError(errorMessage);
+        return;
+      }
       
       setItinerary(data.itinerary);
       setDestination(formData.destination);
       setDuration(formData.duration);
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to generate itinerary. Please try again.');
+      setError('Network error. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }
@@ -57,6 +62,12 @@ export default function ItineraryGeneratorPage() {
               Create personalized travel plans in seconds with our AI-powered itinerary generator
             </p>
           </div>
+          
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+              {error}
+            </div>
+          )}
           
           <div className="bg-white rounded-lg shadow-md overflow-hidden mb-10">
             <div className="bg-gradient-to-r from-[#2472FC] to-[#8711C1] px-6 py-4">

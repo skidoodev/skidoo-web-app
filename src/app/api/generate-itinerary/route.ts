@@ -15,7 +15,10 @@ export async function POST(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json(
-        { error: "Authentication required to generate itineraries" },
+        { 
+          error: "Authentication required",
+          message: "Please sign in to generate itineraries. Creating an itinerary requires a free account."
+        },
         { status: 401 }
       );
     }
@@ -23,7 +26,11 @@ export async function POST(request: NextRequest) {
     // Apply rate limiting using the user's ID
     const rateLimitResult = await rateLimitRequest(userId);
     if (!rateLimitResult.success) {
-      return rateLimitResult.response;
+      // Return a user-friendly rate limit response without minutes
+      return NextResponse.json({
+        error: "Rate limit exceeded",
+        message: "You've reached your daily limit of 5 itinerary generations. Please try again tomorrow."
+      }, { status: 429 });
     }
 
     const { limit, remaining, reset } = rateLimitResult;
