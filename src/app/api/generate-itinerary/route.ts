@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { generateItineraryPrompt } from "@/utils/itineraryPrompt";
 import { rateLimitRequest } from "@/lib/rate-limiter";
 import { getAuth } from "@clerk/nextjs/server"; 
+import { auth } from "@clerk/nextjs/server";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,7 +12,7 @@ const openai = new OpenAI({
 export async function POST(request: NextRequest) {
   try {
     // Correct authentication method for API routes
-    const { userId } = getAuth(request);
+    const { userId } = await auth();
 
     if (!userId) {
       return NextResponse.json(
