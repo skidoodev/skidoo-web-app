@@ -28,11 +28,29 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-      RESEND_API_KEY: z
+    RESEND_API_KEY: z
       .string()
       .refine(
         (str) => !str.includes("YOUR_RESEND_API_KEY"),
         "You forgot to add Resend Key",
+      ),
+    UPSTASH_REDIS_REST_URL: z
+      .string()
+      .refine(
+        (str) => !str.includes("YOUR_UPSTASH_REDIS_REST_URL"),
+        "You forgot to add Upstash Redis URL",
+      ),
+    UPSTASH_REDIS_REST_TOKEN: z
+      .string()
+      .refine(
+        (str) => !str.includes("YOUR_UPSTASH_REDIS_REST_TOKEN"),
+        "You forgot to add Upstash Redis Token",
+      ),
+    OPENAI_API_KEY: z
+      .string()
+      .refine(
+        (str) => !str.includes("YOUR_OPENAI_API_KEY"),
+        "You forgot to add OpenAI API Key",
       ),
   },
 
@@ -62,8 +80,10 @@ export const env = createEnv({
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-    RESEND_API_KEY: process.env.RESEND_API_KEY
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
