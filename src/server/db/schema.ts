@@ -66,3 +66,16 @@ export const travelForm = createTable("travel_form", {
   // Reference the user using clerkId for direct mapping with webhook data
   // userId: text("user_id", { length: 256 })
   //   .references(() => users.id, { onDelete: "cascade" }),
+
+export const userLogs = createTable("user_logs", {
+  id: text("id", { length: 256 }).primaryKey().notNull().$defaultFn(createId),
+  userId: text("user_id", { length: 256 }),
+  userName: text("user_name", { length: 256 }),
+  userEmail: text("user_email", { length: 256 }), // Add this line
+  action: text("action").notNull(),
+  details: text("details", { mode: "json" }).default(sql`'{}'`),
+  createdAt: int("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
